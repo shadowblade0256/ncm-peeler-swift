@@ -2,4 +2,4 @@
 
 (still under developing)
 
-An macOS application that converts Netease encrypted music format(*.ncm) to normal music format.
+A macOS application that converts Netease encrypted music format(*.ncm) to normal music format.
