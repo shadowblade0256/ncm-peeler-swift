@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MainViewController.swift
 //  ncm-peeler
 //
 //  Created by yuxiqian on 2018/9/3.
@@ -22,7 +22,20 @@ class MainViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-
+    
+    @IBOutlet weak var titleTextField: NSTextField!
+    @IBOutlet weak var artistTextField: NSTextField!
+    @IBOutlet weak var albumTextField: NSTextField!
+    @IBOutlet weak var formatTextField: NSTextField!
+    @IBOutlet weak var albumImageView: NSImageView!
+    
+    
+    @IBAction func openCredits(_ sender: NSButton) {
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        let creditsWindowController = storyboard.instantiateController(withIdentifier: "Credits Window Controller") as! NSWindowController
+        creditsWindowController.showWindow(sender)
+    }
+    
     @IBAction func browseNcmFile(_ sender: NSButton) {
         let openNcmPanel = NSOpenPanel()
         openNcmPanel.allowsMultipleSelection = false
@@ -93,7 +106,7 @@ class MainViewController: NSViewController {
             var deData: [UInt8] = []
             
             var artistLen: Int
-            var dataPart = Array(modifyDataAsUInt8[22..<Int(uLen)])
+            let dataPart = Array(modifyDataAsUInt8[22..<Int(uLen)])
             dataLen = dataPart.count
 //            data = (dataPart.toBase64()?.cString(using: .ascii))!
             let decodedData = NSData(base64Encoded: NSData(bytes: dataPart,
@@ -115,6 +128,11 @@ class MainViewController: NSViewController {
             print("Error")
         }
         stream.close()
+    }
+    
+    
+    @IBAction func exportFile(_ sender: NSButton) {
+        
     }
     
     func showErrorMessage(errorMsg: String) {

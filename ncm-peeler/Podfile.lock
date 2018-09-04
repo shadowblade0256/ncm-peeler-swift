@@ -1,16 +1,20 @@
 PODS:
   - CryptoSwift (0.11.0)
+  - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
   - CryptoSwift
+  - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CryptoSwift
+    - SwiftyJSON
 
 SPEC CHECKSUMS:
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
+  SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: 495e2fec99d13ffa014a7d1f9aa38d77c24cb24a
+PODFILE CHECKSUM: 32e6a3faf6ca780dad55c056bc600ac83ab964da
 
 COCOAPODS: 1.5.3

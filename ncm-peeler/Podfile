@@ -1,7 +1,8 @@
 # Uncomment the next line to define a global platform for your project
-# platform :macos, '10.12'
+# platform :osx, '10.12'
 
 target 'ncm-peeler' do
   use_frameworks!
   pod 'CryptoSwift'
+  pod 'SwiftyJSON', '~> 4.0'
 end
