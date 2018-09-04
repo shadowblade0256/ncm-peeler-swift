@@ -11,11 +11,23 @@ import CryptoSwift
 import SwiftyJSON
 import ID3TagEditor
 
-class MainViewController: NSViewController {
+class MainViewController: NSViewController, dropFileDelegate {
+    
+    func onFileDrop(_ ncmUrl: URL) {
+        let inputStream = InputStream(fileAtPath: ((ncmUrl.path)))
+        DispatchQueue.main.async {
+            self.clearUI()
+            self.globalInStream = inputStream
+            print((ncmUrl.path))
+            self.startAnalyse(inStream: inputStream!)
+        }
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.exportButton.isEnabled = false
+        self.albumView.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -25,11 +37,12 @@ class MainViewController: NSViewController {
         }
     }
     
+    
     @IBOutlet weak var titleTextField: NSTextField!
     @IBOutlet weak var artistTextField: NSTextField!
     @IBOutlet weak var albumTextField: NSTextField!
     @IBOutlet weak var formatTextField: NSTextField!
-    @IBOutlet weak var albumImageView: NSImageView!
+    @IBOutlet weak var albumView: DragableButton!
     
     @IBOutlet weak var exportButton: NSButton!
     
@@ -39,6 +52,7 @@ class MainViewController: NSViewController {
     var crc32Check: Int = 0
     var canOutput: Bool = false
     var musicTag: ID3Tag?
+    var globalMusicId: Int = 0
     
     @IBAction func openCredits(_ sender: NSButton) {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -56,6 +70,7 @@ class MainViewController: NSViewController {
                 let ncmUrl = openNcmPanel.url
                 let inputStream = InputStream(fileAtPath: ((ncmUrl?.path)!))
                 DispatchQueue.main.async {
+                    self.clearUI()
                     self.globalInStream = inputStream
                     print((ncmUrl?.path)!)
                     self.startAnalyse(inStream: inputStream!)
@@ -67,6 +82,7 @@ class MainViewController: NSViewController {
     
     
     @IBAction func exportFile(_ sender: NSButton) {
+        self.exportButton.isEnabled = false
         let savePanel = NSSavePanel()
         switch self.readyFileType {
         case .mp3:
@@ -78,6 +94,7 @@ class MainViewController: NSViewController {
         default:
             break
         }
+        savePanel.nameFieldStringValue = "\(musicTag?.artist ?? "Artist") - \(musicTag?.title ?? "Title")"
         savePanel.beginSheetModal(for: self.view.window!, completionHandler: { returnCode in
             if returnCode == NSApplication.ModalResponse.OK {
                 let saveUrl = savePanel.url
@@ -93,6 +110,18 @@ class MainViewController: NSViewController {
                 }
             }
         })
+    }
+    
+    
+    @IBAction func tappedAlbum(_ sender: NSButton) {
+//        print("tapped")
+        if self.globalMusicId != 0 {
+            if let url = URL(string: "https://music.163.com/#/song?id=\(globalMusicId)"), NSWorkspace.shared.open(url) {
+                // 成功打开
+            }
+        } else {
+            browseNcmFile(sender)
+        }
     }
     
     func startAnalyse(inStream: InputStream) {
@@ -115,6 +144,7 @@ class MainViewController: NSViewController {
                 if headerBuf[i] != standardHead[i] {
                     showErrorMessage(errorMsg: "貌似不是正确的 ncm 格式文件？")
                     inStream.close()
+                    self.clearUI()
                     return
                 }
             }
@@ -174,10 +204,11 @@ class MainViewController: NSViewController {
                 metaData[i] = metaData[i + 6]
             }
             metaData[dataLen - 6] = 0
-            // 手动写 C 字符串结束符
+            // 手动写 C 字符串结束符 \0
             
         } catch {
             showErrorMessage(errorMsg: "读取数据失败。")
+            self.clearUI()
             return
         }
         
@@ -187,17 +218,20 @@ class MainViewController: NSViewController {
         var albumImageLink: String = ""
         var artistNameArray: [String] = []
         var musicFormat: MusicFormat
+        var musicId: Int = 0
+        var duration: Int = 0
         var bitRate: Int = 0
         
         do {
             let musicInfo = String(cString: &metaData)
-//            print(musicInfo)
+            print(musicInfo)
             let musicMeta = try JSON(data: musicInfo.data(using: .utf8)!)
             musicName = musicMeta["musicName"].stringValue
             albumName = musicMeta["album"].stringValue
+            duration = musicMeta["duration"].intValue
             albumImageLink = musicMeta["albumPic"].stringValue
             bitRate = musicMeta["bitrate"].intValue
-            
+            musicId = musicMeta["musicId"].intValue
             switch musicMeta["format"].stringValue {
             case "mp3":
                 musicFormat = .mp3
@@ -217,6 +251,7 @@ class MainViewController: NSViewController {
             }
         } catch {
             showErrorMessage(errorMsg: "文件元数据解析失败。")
+            self.clearUI()
             return
         }
 
@@ -225,11 +260,13 @@ class MainViewController: NSViewController {
             do {
                 let image = try NSImage(data: Data(contentsOf: URL(string: albumImageLink)!))
                 DispatchQueue.main.async {
-                    self.albumImageView.image = image
+                    self.albumView.image = image
+                    self.albumView.title = ""
                 }
             } catch {
                 DispatchQueue.main.async {
-                    self.showErrorMessage(errorMsg: "未能加载服务器端的专辑封面。\n\n将会使用 ncm 文件内嵌的专辑封面。")
+                    self.showInfo(infoMsg: "未能加载服务器端的专辑封面。\n\n将会使用 ncm 文件内嵌的专辑封面。")
+                    // 其实两个没啥区别…
                 }
             }
         }
@@ -237,7 +274,7 @@ class MainViewController: NSViewController {
         self.titleTextField.stringValue = "标题：\(musicName)"
         self.albumTextField.stringValue = "专辑：\(albumName)"
         self.artistTextField.stringValue = "艺术家：\(artistNameArray.joined(separator: ", "))"
-        self.formatTextField.stringValue = "格式：\(getFormat(musicFormat, bitRate))"
+        self.formatTextField.stringValue = "格式：\(getFormat(musicFormat, bitRate, duration))"
         
 
         
@@ -266,8 +303,9 @@ class MainViewController: NSViewController {
         // 就算决定不用本地的版本
         // 也还是要 read 出来这么多字节
         // 否则后面没法继续
-        if self.albumImageView.image == nil {
-            self.albumImageView.image = NSImage(data: Data(bytes: imageData))
+        if self.albumView.image == nil {
+            self.albumView.image = NSImage(data: Data(bytes: imageData))
+            self.albumView.title = ""
         }
         
         let id3Tag = ID3Tag(
@@ -278,11 +316,11 @@ class MainViewController: NSViewController {
             title: musicName,
             recordingDateTime: nil,
             genre: nil,
-            attachedPictures: [AttachedPicture(picture: (self.albumImageView.image?.tiffRepresentation)!, type: .FrontCover, format: .Jpeg)],
+            attachedPictures: [AttachedPicture(picture: (self.albumView.image?.tiffRepresentation)!, type: .FrontCover, format: .Jpeg)],
             trackPosition: nil
             )
         self.musicTag = id3Tag
-        
+        self.globalMusicId = musicId
         
         let realDeKeyData = Array(deKeyData[17..<(deKeyData.count)])
         // 从第 17 位开始取 deKeyData
@@ -295,7 +333,6 @@ class MainViewController: NSViewController {
     
     func startOutput(inStream: InputStream, outStream: OutputStream, path: String) {
         outStream.open()
-        self.exportButton.isEnabled = false
         let bufSize = 0x8000
         var buffer: [UInt8] = [UInt8](repeating: 0, count: bufSize)
         while inStream.hasBytesAvailable {
@@ -336,5 +373,21 @@ class MainViewController: NSViewController {
         infoAlert.alertStyle = NSAlert.Style.informational
         infoAlert.beginSheetModal(for: self.view.window!, completionHandler: nil)
     }
+    
+    func clearUI() {
+        
+        self.titleTextField.stringValue = "本程序可以将 ncm 格式"
+        self.artistTextField.stringValue = "转化为 mp3 或 flac 格式。"
+        self.albumTextField.stringValue = "（网易云音乐加密格式）"
+        self.formatTextField.stringValue = "元数据会得到保留。"
+        self.albumView.title = "…或者拖放到这里。"
+        self.albumView.image = nil
+        self.exportButton.isEnabled = false
+        self.globalMusicId = 0
+        self.readyFileType = .unknown
+        self.globalInStream = nil
+        self.keyBox = []
+        self.crc32Check = 0
+        self.canOutput = false
+    }
 }
-

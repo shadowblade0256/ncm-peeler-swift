@@ -37,18 +37,20 @@ enum MusicFormat {
     case unknown
 }
 
-func getFormat(_ Format: MusicFormat, _ bitRate: Int) -> String {
+func getFormat(_ Format: MusicFormat, _ bitRate: Int, _ duration: Int) -> String {
     var result = ""
     switch Format {
     case .mp3:
-        result += "MP3\n"
+        result += "mp3\n"
         break
     case .flac:
-        result += "FLAC\n"
+        result += "flac\n"
         break
     default:
+        result += "未知\n"
         break
     }
+    result += "持续时间：\(secondsToFormat(Int(duration / 1000)))\n"
     result += "比特率：\(Int(bitRate / 1000))kbit/s"
     return result
 }
@@ -70,4 +72,12 @@ func buildKeyBox(key: [UInt8]) -> [UInt8] {
         i += 1
     }
     return keyBox
+}
+
+func secondsToFormat(_ seconds: Int) -> String {
+    return String(format: "%d:%02d", arguments: [Int(seconds / 60), seconds % 60])
+}
+
+protocol dropFileDelegate {
+    func onFileDrop(_ ncmUrl: URL) -> ()
 }
