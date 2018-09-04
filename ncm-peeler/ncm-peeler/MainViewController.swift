@@ -57,11 +57,14 @@ class MainViewController: NSViewController {
             var tmp: [UInt8] = [UInt8](repeating: 0, count: 2)
             stream.read(&tmp, maxLength: tmp.count)
             // 向后读两个字节但是啥也不干
+            // 两个字节 = 两个 UInt8
+            tmp.removeAll()
             
             var keyLenBuf: [UInt8] = [UInt8](repeating: 0, count: 4)
             // 4 个 UInt8 充 UInt32
             stream.read(&keyLenBuf, maxLength: keyLenBuf.count)
-            let keyLen: UInt32 = keyLenBuf.map{UInt32($0)}.first!
+
+            let keyLen: UInt32 = fourUInt8Combine(&keyLenBuf)
             
             var keyData: [UInt8] = [UInt8](repeating: 0, count: Int(keyLen))
             let keyLength = stream.read(&keyData, maxLength: keyData.count)
@@ -71,26 +74,45 @@ class MainViewController: NSViewController {
 //            var deKeyLen: Int = 0
             var deKeyData: [UInt8] = [UInt8](repeating: 0, count: Int(keyLen))
 
-            let iv: [UInt8] = AES.randomIV(AES.blockSize)
-            let aes = try AES(key: aesCoreKey, blockMode: CBC(iv: iv))
-            deKeyData = try aes.decrypt(keyData)
+            deKeyData = try AES(key: aesCoreKey,
+                                blockMode: ECB(),
+                                padding: .pkcs7).decrypt(keyData)
             
             var uLenBuf: [UInt8] = [UInt8](repeating: 0, count: 4)
             // 4 个 UInt8 充 UInt32
             stream.read(&uLenBuf, maxLength: uLenBuf.count)
-            let uLen: UInt32 = uLenBuf.map{UInt32($0)}.first!
-            var modifyData: [char16_t] = []
-            var modifyDataAsUInt8: [UInt8] = [UInt8](repeating: 0, count: Int(uLen) * 2)
-            stream.read(&modifyDataAsUInt8, maxLength: Int(uLen) * 2)
+            let uLen: UInt32 = fourUInt8Combine(&uLenBuf)
+            var modifyDataAsUInt8: [UInt8] = [UInt8](repeating: 0, count: Int(uLen))
+            stream.read(&modifyDataAsUInt8, maxLength: Int(uLen))
             for i in 0..<Int(uLen) {
-                let tempUInt8: [UInt8] = [modifyDataAsUInt8[i * 2] ^ 0x6,
-                                          modifyDataAsUInt8[i * 2 + 1] ^ 0x3]
-                modifyData.append(char16_t(tempUInt8.map{char16_t($0)}.first!))
+                modifyDataAsUInt8[i] ^= 0x63
             }
             var dataLen: Int
+            var data: [CChar] = []
+            var intData: [UInt8] = []
+            var deData: [UInt8] = []
             
+            var artistLen: Int
+            var dataPart = Array(modifyDataAsUInt8[22..<Int(uLen)])
+            dataLen = dataPart.count
+//            data = (dataPart.toBase64()?.cString(using: .ascii))!
+            let decodedData = NSData(base64Encoded: NSData(bytes: dataPart,
+                                                                   length: dataLen) as Data,
+                                     options: NSData.Base64DecodingOptions.init(rawValue: 0)
+                                     )
+            
+            deData = try AES(key: aesModifyKey, blockMode: ECB()).decrypt([UInt8](decodedData! as Data))
+            dataLen = deData.count
+
+            for i in 0..<(dataLen - 6) {
+                deData[i] = deData[i + 6]
+            }
+            deData[dataLen - 6] = 0
+            // 写文件结束符
+            let musicInfo = String(cString: &deData)
+            print(musicInfo)
         } catch {
-            // do nothing
+            print("Error")
         }
         stream.close()
     }
