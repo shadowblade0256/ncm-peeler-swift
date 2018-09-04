@@ -8,6 +8,7 @@
 
 import Cocoa
 import CryptoSwift
+import SwiftyJSON
 
 class MainViewController: NSViewController {
 
@@ -54,9 +55,16 @@ class MainViewController: NSViewController {
     }
     
     func startAnalyse(stream: InputStream) {
-        var headerBuf: [UInt8] = [UInt8](repeating: 0, count: 8)
+        var headerBuf: [UInt8] = []
+        var tmpBuf: [UInt8] = []
+        var keyLenBuf: [UInt8] = []
+        var keyData: [UInt8] = []
+        var deKeyData: [UInt8] = []
+        var uLenBuf: [UInt8] = []
+        var metaData: [UInt8] = []
         stream.open()
         do {
+            headerBuf = [UInt8](repeating: 0, count: 8)
             let length = stream.read(&headerBuf, maxLength: headerBuf.count)
             for i in 0..<length {
                 if headerBuf[i] != standardHead[i] {
@@ -67,31 +75,31 @@ class MainViewController: NSViewController {
             }
             print("file head matched.")
             
-            var tmp: [UInt8] = [UInt8](repeating: 0, count: 2)
-            stream.read(&tmp, maxLength: tmp.count)
+            tmpBuf = [UInt8](repeating: 0, count: 2)
+            stream.read(&tmpBuf, maxLength: tmpBuf.count)
             // 向后读两个字节但是啥也不干
             // 两个字节 = 两个 UInt8
-            tmp.removeAll()
+            tmpBuf.removeAll()
             
-            var keyLenBuf: [UInt8] = [UInt8](repeating: 0, count: 4)
+            keyLenBuf = [UInt8](repeating: 0, count: 4)
             // 4 个 UInt8 充 UInt32
             stream.read(&keyLenBuf, maxLength: keyLenBuf.count)
 
             let keyLen: UInt32 = fourUInt8Combine(&keyLenBuf)
             
-            var keyData: [UInt8] = [UInt8](repeating: 0, count: Int(keyLen))
+            keyData = [UInt8](repeating: 0, count: Int(keyLen))
             let keyLength = stream.read(&keyData, maxLength: keyData.count)
             for i in 0..<keyLength {
                 keyData[i] ^= 0x64
             }
 //            var deKeyLen: Int = 0
-            var deKeyData: [UInt8] = [UInt8](repeating: 0, count: Int(keyLen))
+            deKeyData = [UInt8](repeating: 0, count: Int(keyLen))
 
             deKeyData = try AES(key: aesCoreKey,
                                 blockMode: ECB(),
                                 padding: .pkcs7).decrypt(keyData)
             
-            var uLenBuf: [UInt8] = [UInt8](repeating: 0, count: 4)
+            uLenBuf = [UInt8](repeating: 0, count: 4)
             // 4 个 UInt8 充 UInt32
             stream.read(&uLenBuf, maxLength: uLenBuf.count)
             let uLen: UInt32 = fourUInt8Combine(&uLenBuf)
@@ -101,11 +109,7 @@ class MainViewController: NSViewController {
                 modifyDataAsUInt8[i] ^= 0x63
             }
             var dataLen: Int
-            var data: [CChar] = []
-            var intData: [UInt8] = []
-            var deData: [UInt8] = []
             
-            var artistLen: Int
             let dataPart = Array(modifyDataAsUInt8[22..<Int(uLen)])
             dataLen = dataPart.count
 //            data = (dataPart.toBase64()?.cString(using: .ascii))!
@@ -114,19 +118,57 @@ class MainViewController: NSViewController {
                                      options: NSData.Base64DecodingOptions.init(rawValue: 0)
                                      )
             
-            deData = try AES(key: aesModifyKey, blockMode: ECB()).decrypt([UInt8](decodedData! as Data))
-            dataLen = deData.count
+            metaData = try AES(key: aesModifyKey, blockMode: ECB()).decrypt([UInt8](decodedData! as Data))
+            dataLen = metaData.count
 
             for i in 0..<(dataLen - 6) {
-                deData[i] = deData[i + 6]
+                metaData[i] = metaData[i + 6]
             }
-            deData[dataLen - 6] = 0
-            // 写文件结束符
-            let musicInfo = String(cString: &deData)
-            print(musicInfo)
+            metaData[dataLen - 6] = 0
+            // 手动写 C 字符串结束符
         } catch {
-            print("Error")
+            showErrorMessage(errorMsg: "读取数据失败。")
+            return
         }
+        var musicName: String = ""
+        var albumName: String = ""
+        var albumImageLink: String = ""
+        var artistNameArray: [String] = []
+        do {
+            let musicInfo = String(cString: &metaData)
+            print(musicInfo)
+            let musicMeta = try JSON(data: musicInfo.data(using: .utf8)!)
+            musicName = musicMeta["musicName"].stringValue
+            albumName = musicMeta["album"].stringValue
+            albumImageLink = musicMeta["albumPic"].stringValue
+            if let artistArray = musicMeta["artist"].array {
+                for index in 0..<artistArray.count {
+                    artistNameArray.append(artistArray[index][0].stringValue)
+                }
+            }
+        } catch {
+            showErrorMessage(errorMsg: "文件元数据解析失败。")
+            return
+        }
+
+        DispatchQueue.global().async {
+            // 新开一个线程读图片
+            do {
+                let image = try NSImage(data: Data(contentsOf: URL(string: albumImageLink)!))
+                DispatchQueue.main.async {
+                    self.albumImageView.image = image
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.showErrorMessage(errorMsg: "没获取专辑封面哦。")
+                }
+            }
+        }
+        
+        self.titleTextField.stringValue = musicName
+        self.albumTextField.stringValue = albumName
+        self.artistTextField.stringValue = artistNameArray.joined(separator: "、")
+        
         stream.close()
     }
     
