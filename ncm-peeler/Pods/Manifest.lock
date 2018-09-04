@@ -1,20 +1,24 @@
 PODS:
   - CryptoSwift (0.11.0)
+  - ID3TagEditor (2.1.0)
   - SwiftyJSON (4.1.0)
 
 DEPENDENCIES:
   - CryptoSwift
+  - ID3TagEditor (~> 2.0)
   - SwiftyJSON (~> 4.0)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CryptoSwift
+    - ID3TagEditor
     - SwiftyJSON
 
 SPEC CHECKSUMS:
   CryptoSwift: ad5208dd2aae0a764ea4ce2c2d34bd067cae67f0
+  ID3TagEditor: ed2759f633841400a4375885e51694344d431780
   SwiftyJSON: c29297daf073d2aa016295d5809cdd68045c39b3
 
-PODFILE CHECKSUM: 32e6a3faf6ca780dad55c056bc600ac83ab964da
+PODFILE CHECKSUM: f7db5b9b92b1e4583c6eb99b2cbc0dd83e03a109
 
 COCOAPODS: 1.5.3

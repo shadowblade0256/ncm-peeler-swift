@@ -9,12 +9,13 @@
 import Cocoa
 import CryptoSwift
 import SwiftyJSON
+import ID3TagEditor
 
 class MainViewController: NSViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.exportButton.isEnabled = false
         // Do any additional setup after loading the view.
     }
 
@@ -30,10 +31,14 @@ class MainViewController: NSViewController {
     @IBOutlet weak var formatTextField: NSTextField!
     @IBOutlet weak var albumImageView: NSImageView!
     
+    @IBOutlet weak var exportButton: NSButton!
+    
     var readyFileType: MusicFormat = .unknown
     var globalInStream: InputStream?
     var keyBox: [UInt8] = []
     var crc32Check: Int = 0
+    var canOutput: Bool = false
+    var musicTag: ID3Tag?
     
     @IBAction func openCredits(_ sender: NSButton) {
         let storyboard = NSStoryboard(name: "Main", bundle: nil)
@@ -79,8 +84,11 @@ class MainViewController: NSViewController {
                 let outputStream = OutputStream(toFileAtPath: (saveUrl?.path)!, append: false)
                 DispatchQueue.main.async {
                     if self.globalInStream != nil {
-                        print("准备输出到：\(saveUrl?.path)")
-                        self.startOutput(inStream: self.globalInStream!, outStream: outputStream!)
+                        let outputPath = saveUrl?.path
+//                        print("准备输出到：\(outputPath)")
+                        self.startOutput(inStream: self.globalInStream!,
+                                         outStream: outputStream!,
+                                         path: outputPath!)
                     }
                 }
             }
@@ -228,9 +236,10 @@ class MainViewController: NSViewController {
         
         self.titleTextField.stringValue = "标题：\(musicName)"
         self.albumTextField.stringValue = "专辑：\(albumName)"
-        self.artistTextField.stringValue = "艺术家：\(artistNameArray.joined(separator: "、"))"
+        self.artistTextField.stringValue = "艺术家：\(artistNameArray.joined(separator: ", "))"
         self.formatTextField.stringValue = "格式：\(getFormat(musicFormat, bitRate))"
         
+
         
         // 继续往下读 CRC32 校验和
         crc32CheckBuf = [UInt8](repeating: 0, count: 4)
@@ -261,15 +270,30 @@ class MainViewController: NSViewController {
             self.albumImageView.image = NSImage(data: Data(bytes: imageData))
         }
         
+        let id3Tag = ID3Tag(
+            version: .version3,
+            artist: artistNameArray.joined(separator: ", "),
+            albumArtist: artistNameArray.joined(separator: ", "),
+            album: albumName,
+            title: musicName,
+            recordingDateTime: nil,
+            genre: nil,
+            attachedPictures: [AttachedPicture(picture: (self.albumImageView.image?.tiffRepresentation)!, type: .FrontCover, format: .Jpeg)],
+            trackPosition: nil
+            )
+        self.musicTag = id3Tag
+        
         
         let realDeKeyData = Array(deKeyData[17..<(deKeyData.count)])
         // 从第 17 位开始取 deKeyData
         // 创建新的 realDeKeyData 并用它生成 keyBox
         self.keyBox = buildKeyBox(key: realDeKeyData)
+        
+        self.exportButton.isEnabled = true
     }
 
     
-    func startOutput(inStream: InputStream, outStream: OutputStream) {
+    func startOutput(inStream: InputStream, outStream: OutputStream, path: String) {
         outStream.open()
         let bufSize = 0x8000
         var buffer: [UInt8] = [UInt8](repeating: 0, count: bufSize)
@@ -283,7 +307,20 @@ class MainViewController: NSViewController {
         }
         inStream.close()
         outStream.close()
-        self.showInfo(infoMsg: "成功输出文件。\n\n预计 CRC32 校验和：\(crc32Check)。")
+        writeMetaInfo(path)
+        self.exportButton.isEnabled = false
+        self.showInfo(infoMsg: "成功输出文件到 \(path)。\n\n预计 CRC32 校验和：\(crc32Check)。")
+    }
+    
+    func writeMetaInfo(_ filePath: String) {
+        if musicTag != nil {
+            do {
+                let id3TagEditor = ID3TagEditor()
+                try id3TagEditor.write(tag: self.musicTag!, to: filePath)
+            } catch {
+                showErrorMessage(errorMsg: "未能成功写入元数据信息。")
+            }
+        }
     }
     
     func showErrorMessage(errorMsg: String) {

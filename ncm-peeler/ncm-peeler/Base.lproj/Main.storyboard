@@ -190,6 +190,7 @@
                         <outlet property="albumImageView" destination="PZ1-Bs-VV2" id="bcq-fj-HFT"/>
                         <outlet property="albumTextField" destination="o6K-ys-LDm" id="cP8-mH-Ghk"/>
                         <outlet property="artistTextField" destination="8rh-sd-oRk" id="Ehq-vm-iht"/>
+                        <outlet property="exportButton" destination="yf3-zd-jUN" id="QkN-et-9b9"/>
                         <outlet property="formatTextField" destination="JaV-2L-r7K" id="Qw0-Ky-IcK"/>
                         <outlet property="titleTextField" destination="xY5-Fe-rMu" id="fPZ-bW-37E"/>
                     </connections>
