@@ -15,6 +15,7 @@
 		8A1582BF213D08E9000E675C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A1582BD213D08E9000E675C /* Main.storyboard */; };
 		8A1582CA213D0C36000E675C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582C9213D0C36000E675C /* Utilities.swift */; };
 		8A7D1BC4213D135B002AD4D5 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */; };
+		8ACF7592213E328A00EC5A47 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 8ACF7591213E328A00EC5A47 /* Podfile */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		8A1582C9213D0C36000E675C /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ACF7590213E2A0400EC5A47 /* ncm-peeler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ncm-peeler.entitlements"; sourceTree = "<group>"; };
+		8ACF7591213E328A00EC5A47 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = Podfile; sourceTree = "<group>"; };
 		B0F48DC667EDD8D0E85AB6B7 /* Pods_ncm_peeler.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ncm_peeler.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -50,6 +52,7 @@
 		679EBC587B39DEB59B06FD7C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8ACF7591213E328A00EC5A47 /* Podfile */,
 				8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */,
 				B0F48DC667EDD8D0E85AB6B7 /* Pods_ncm_peeler.framework */,
 			);
@@ -164,6 +167,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8ACF7592213E328A00EC5A47 /* Podfile in Resources */,
 				8A1582BC213D08E9000E675C /* Assets.xcassets in Resources */,
 				8A1582BF213D08E9000E675C /* Main.storyboard in Resources */,
 			);

@@ -28,3 +28,46 @@ let aesModifyKey: [UInt8] = [0x23, 0x31, 0x34, 0x6C, 0x6A, 0x6B, 0x5F, 0x21, 0x5
 // AES 解密用密钥两枚
 
 let defaultUrl = URL(string: "https://avatars0.githubusercontent.com/u/34335406?s=400&v=4")
+// when the url is invalid, which is not very likely,
+// put my github photo on it.
+
+enum MusicFormat {
+    case mp3
+    case flac
+    case unknown
+}
+
+func getFormat(_ Format: MusicFormat, _ bitRate: Int) -> String {
+    var result = ""
+    switch Format {
+    case .mp3:
+        result += "MP3\n"
+        break
+    case .flac:
+        result += "FLAC\n"
+        break
+    default:
+        break
+    }
+    result += "比特率：\(Int(bitRate / 1000))kbit/s"
+    return result
+}
+
+func buildKeyBox(key: [UInt8]) -> [UInt8] {
+    var keyBox: [UInt8] = [UInt8](repeating: 0, count: 256)
+    var i: Int = 0
+    while i < 256 {
+        keyBox[i] = UInt8(i)
+        i += 1
+    }
+    
+    i = 0
+    var j: UInt8 = 0
+    let keyLength = key.count
+    while i < 256 {
+        j = (UInt8(keyBox[i]) &+ j &+ key[i % keyLength]) & 0xff
+        keyBox.swapAt(i, Int(j))
+        i += 1
+    }
+    return keyBox
+}
