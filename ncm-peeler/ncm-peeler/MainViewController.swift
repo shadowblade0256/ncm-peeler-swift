@@ -295,6 +295,7 @@ class MainViewController: NSViewController {
     
     func startOutput(inStream: InputStream, outStream: OutputStream, path: String) {
         outStream.open()
+        self.exportButton.isEnabled = false
         let bufSize = 0x8000
         var buffer: [UInt8] = [UInt8](repeating: 0, count: bufSize)
         while inStream.hasBytesAvailable {
@@ -308,7 +309,6 @@ class MainViewController: NSViewController {
         inStream.close()
         outStream.close()
         writeMetaInfo(path)
-        self.exportButton.isEnabled = false
         self.showInfo(infoMsg: "成功输出文件到 \(path)。\n\n预计 CRC32 校验和：\(crc32Check)。")
     }
     
