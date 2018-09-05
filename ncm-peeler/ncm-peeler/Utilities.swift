@@ -79,5 +79,5 @@ func secondsToFormat(_ seconds: Int) -> String {
 }
 
 protocol dropFileDelegate {
-    func onFileDrop(_ ncmUrl: URL) -> ()
+    func onFileDrop(_ path: String) -> ()
 }

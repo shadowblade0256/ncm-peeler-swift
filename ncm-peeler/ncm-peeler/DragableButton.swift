@@ -1,5 +1,5 @@
 //
-//  DragView.swift
+//  DragableButton.swift
 //  ncm-peeler
 //
 //  Created by yuxiqian on 2018/9/4.
@@ -61,7 +61,7 @@ class DragableButton: NSButton {
         guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = pasteboard[0] as? String
             else { return false }
-        self.delegate?.onFileDrop(URL(string: path)!)
+        self.delegate?.onFileDrop(path)
         return true
     }
 }

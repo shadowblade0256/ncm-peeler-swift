@@ -169,7 +169,7 @@
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="d5a-vv-3xf" customClass="DragableButton" customModule="ncm_peeler" customModuleProvider="target">
-                                <rect key="frame" x="20" y="20" width="258" height="261"/>
+                                <rect key="frame" x="20" y="21" width="260" height="260"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="square" title="…或者拖放到这里。" bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="QhZ-rc-Bn7">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

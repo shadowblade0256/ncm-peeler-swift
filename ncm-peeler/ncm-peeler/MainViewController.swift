@@ -13,12 +13,12 @@ import ID3TagEditor
 
 class MainViewController: NSViewController, dropFileDelegate {
     
-    func onFileDrop(_ ncmUrl: URL) {
-        let inputStream = InputStream(fileAtPath: ((ncmUrl.path)))
+    func onFileDrop(_ path: String) {
+        let inputStream = InputStream(fileAtPath: path)
         DispatchQueue.main.async {
             self.clearUI()
             self.globalInStream = inputStream
-            print((ncmUrl.path))
+            print(path)
             self.startAnalyse(inStream: inputStream!)
         }
     }
@@ -82,7 +82,6 @@ class MainViewController: NSViewController, dropFileDelegate {
     
     
     @IBAction func exportFile(_ sender: NSButton) {
-        self.exportButton.isEnabled = false
         let savePanel = NSSavePanel()
         switch self.readyFileType {
         case .mp3:
@@ -97,6 +96,7 @@ class MainViewController: NSViewController, dropFileDelegate {
         savePanel.nameFieldStringValue = "\(musicTag?.artist ?? "Artist") - \(musicTag?.title ?? "Title")"
         savePanel.beginSheetModal(for: self.view.window!, completionHandler: { returnCode in
             if returnCode == NSApplication.ModalResponse.OK {
+                self.exportButton.isEnabled = false
                 let saveUrl = savePanel.url
                 let outputStream = OutputStream(toFileAtPath: (saveUrl?.path)!, append: false)
                 DispatchQueue.main.async {
