@@ -61,7 +61,12 @@ class DragableButton: NSButton {
         guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = pasteboard[0] as? String
             else { return false }
-        self.delegate?.onFileDrop(path)
-        return true
+        if pasteboard.count == 1 {
+            self.delegate?.onFileDrop(path)
+            return true
+        } else {
+            self.delegate?.openBatch(pasteboard)
+            return true
+        }
     }
 }

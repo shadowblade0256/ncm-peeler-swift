@@ -17,6 +17,9 @@
 		8A6D73D6213ECE1C001119C1 /* ID3TagEditor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6D73D5213ECE1C001119C1 /* ID3TagEditor.framework */; };
 		8A6D73D8213ECE20001119C1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6D73D7213ECE20001119C1 /* SwiftyJSON.framework */; };
 		8A6D73DC213ED14B001119C1 /* DragableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D73DB213ED14B001119C1 /* DragableButton.swift */; };
+		8A76FA91213F6CAF00439D02 /* BatchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */; };
+		8A76FA93213F6FF400439D02 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA92213F6FF400439D02 /* Music.swift */; };
+		8A76FA96213F744500439D02 /* musicParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA95213F744500439D02 /* musicParser.swift */; };
 		8A7D1BC4213D135B002AD4D5 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */; };
 		8ACF7592213E328A00EC5A47 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 8ACF7591213E328A00EC5A47 /* Podfile */; };
 /* End PBXBuildFile section */
@@ -36,6 +39,9 @@
 		8A6D73D5213ECE1C001119C1 /* ID3TagEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ID3TagEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A6D73D7213ECE20001119C1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A6D73DB213ED14B001119C1 /* DragableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragableButton.swift; sourceTree = "<group>"; };
+		8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BatchViewController.xib; sourceTree = "<group>"; };
+		8A76FA92213F6FF400439D02 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
+		8A76FA95213F744500439D02 /* musicParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = musicParser.swift; sourceTree = "<group>"; };
 		8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ACF7590213E2A0400EC5A47 /* ncm-peeler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ncm-peeler.entitlements"; sourceTree = "<group>"; };
 		8ACF7591213E328A00EC5A47 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = Podfile; sourceTree = "<group>"; };
@@ -90,18 +96,37 @@
 		8A1582B3213D08E8000E675C /* ncm-peeler */ = {
 			isa = PBXGroup;
 			children = (
+				8A76FA94213F6FF800439D02 /* Utilities */,
+				8A76FA8D213F6C7500439D02 /* ViewController */,
 				8ACF7590213E2A0400EC5A47 /* ncm-peeler.entitlements */,
 				8A1582B4213D08E8000E675C /* AppDelegate.swift */,
-				8A1582B6213D08E8000E675C /* MainViewController.swift */,
-				8A6D73DB213ED14B001119C1 /* DragableButton.swift */,
-				8A1582C9213D0C36000E675C /* Utilities.swift */,
 				8A1582BB213D08E9000E675C /* Assets.xcassets */,
+				8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */,
 				8A1582BD213D08E9000E675C /* Main.storyboard */,
 				8A1582C0213D08E9000E675C /* Info.plist */,
 				8A1582C1213D08E9000E675C /* ncm_peeler.entitlements */,
 				8A1582B8213D08E8000E675C /* ncm_peeler.xcdatamodeld */,
 			);
 			path = "ncm-peeler";
+			sourceTree = "<group>";
+		};
+		8A76FA8D213F6C7500439D02 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8A1582B6213D08E8000E675C /* MainViewController.swift */,
+				8A6D73DB213ED14B001119C1 /* DragableButton.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		8A76FA94213F6FF800439D02 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				8A1582C9213D0C36000E675C /* Utilities.swift */,
+				8A76FA92213F6FF400439D02 /* Music.swift */,
+				8A76FA95213F744500439D02 /* musicParser.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		9766DF68EA5500C2D02D9F53 /* Pods */ = {
@@ -179,6 +204,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8ACF7592213E328A00EC5A47 /* Podfile in Resources */,
+				8A76FA91213F6CAF00439D02 /* BatchViewController.xib in Resources */,
 				8A1582BC213D08E9000E675C /* Assets.xcassets in Resources */,
 				8A1582BF213D08E9000E675C /* Main.storyboard in Resources */,
 			);
@@ -244,7 +270,9 @@
 			files = (
 				8A1582BA213D08E8000E675C /* ncm_peeler.xcdatamodeld in Sources */,
 				8A1582B7213D08E8000E675C /* MainViewController.swift in Sources */,
+				8A76FA96213F744500439D02 /* musicParser.swift in Sources */,
 				8A1582CA213D0C36000E675C /* Utilities.swift in Sources */,
+				8A76FA93213F6FF400439D02 /* Music.swift in Sources */,
 				8A1582B5213D08E8000E675C /* AppDelegate.swift in Sources */,
 				8A6D73DC213ED14B001119C1 /* DragableButton.swift in Sources */,
 			);

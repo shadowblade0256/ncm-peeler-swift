@@ -19,8 +19,37 @@ class MainViewController: NSViewController, dropFileDelegate {
             self.clearUI()
             self.globalInStream = inputStream
             print(path)
-            self.startAnalyse(inStream: inputStream!)
+            self.startAnalyse(inStream: inputStream!, path: path)
         }
+    }
+    
+    func openBatch(_ array: NSArray) {
+        let infoAlert: NSAlert = NSAlert()
+        infoAlert.messageText = "一共选中了 \(array.count) 个文件。\n\n下面请选择批量输出目录。"
+        infoAlert.alertStyle = NSAlert.Style.informational
+        infoAlert.beginSheetModal(for: self.view.window!, completionHandler: { response in
+            let openFolder = NSOpenPanel()
+            openFolder.canChooseDirectories = true
+            openFolder.beginSheetModal(for: self.view.window!, completionHandler: { returnCode in
+                if returnCode == NSApplication.ModalResponse.OK {
+                    DispatchQueue.global().async {
+                        let target = openFolder.url
+                        for i in array {
+                            let inputStream = InputStream(fileAtPath: i as! String)
+                            if let path = self.startAnalyse(inStream: inputStream!, path: target!.path, batch: true) {
+                                print(path)
+                                let outputStream = OutputStream(toFileAtPath: path,
+                                                                append: false)
+                                self.startOutputBatch(inStream: inputStream!, outStream: outputStream!, path: path)
+                            }
+                        }
+                        DispatchQueue.main.async {
+                            self.clearUI()
+                        }
+                    }
+                }
+            })
+        })
     }
     
 
@@ -43,7 +72,6 @@ class MainViewController: NSViewController, dropFileDelegate {
     @IBOutlet weak var albumTextField: NSTextField!
     @IBOutlet weak var formatTextField: NSTextField!
     @IBOutlet weak var albumView: DragableButton!
-    
     @IBOutlet weak var exportButton: NSButton!
     
     var readyFileType: MusicFormat = .unknown
@@ -62,18 +90,26 @@ class MainViewController: NSViewController, dropFileDelegate {
     
     @IBAction func browseNcmFile(_ sender: NSButton) {
         let openNcmPanel = NSOpenPanel()
-        openNcmPanel.allowsMultipleSelection = false
+        openNcmPanel.allowsMultipleSelection = true
         openNcmPanel.allowedFileTypes = ["ncm"]
         openNcmPanel.directoryURL = nil
         openNcmPanel.beginSheetModal(for: self.view.window!, completionHandler: { returnCode in
             if returnCode == NSApplication.ModalResponse.OK {
-                let ncmUrl = openNcmPanel.url
-                let inputStream = InputStream(fileAtPath: ((ncmUrl?.path)!))
-                DispatchQueue.main.async {
-                    self.clearUI()
-                    self.globalInStream = inputStream
-                    print((ncmUrl?.path)!)
-                    self.startAnalyse(inStream: inputStream!)
+                if openNcmPanel.urls.count == 1 {
+                    let ncmUrl = openNcmPanel.url
+                    let inputStream = InputStream(fileAtPath: ((ncmUrl?.path)!))
+                    DispatchQueue.main.async {
+                        self.clearUI()
+                        self.globalInStream = inputStream
+                        print((ncmUrl?.path)!)
+                        self.startAnalyse(inStream: inputStream!)
+                    }
+                } else if openNcmPanel.urls.count > 1 {
+                    var paths: NSArray = []
+                    for url in openNcmPanel.urls {
+                        paths = paths.adding(url.path) as NSArray
+                    }
+                    self.openBatch(paths)
                 }
             }
         })
@@ -99,10 +135,10 @@ class MainViewController: NSViewController, dropFileDelegate {
                 self.exportButton.isEnabled = false
                 let saveUrl = savePanel.url
                 let outputStream = OutputStream(toFileAtPath: (saveUrl?.path)!, append: false)
-                DispatchQueue.main.async {
+                DispatchQueue.global().async {
                     if self.globalInStream != nil {
                         let outputPath = saveUrl?.path
-//                        print("准备输出到：\(outputPath)")
+                        print("准备输出到：\(outputPath ?? "bad path")")
                         self.startOutput(inStream: self.globalInStream!,
                                          outStream: outputStream!,
                                          path: outputPath!)
@@ -124,8 +160,7 @@ class MainViewController: NSViewController, dropFileDelegate {
         }
     }
     
-    func startAnalyse(inStream: InputStream) {
-        
+    func startAnalyse(inStream: InputStream, path: String = "/", batch: Bool = false) -> String? {
         var headerBuf: [UInt8] = []
         var tmpBuf: [UInt8] = []
         var keyLenBuf: [UInt8] = []
@@ -145,7 +180,7 @@ class MainViewController: NSViewController, dropFileDelegate {
                     showErrorMessage(errorMsg: "貌似不是正确的 ncm 格式文件？")
                     inStream.close()
                     self.clearUI()
-                    return
+                    return nil
                 }
             }
             print("file head matched.")
@@ -209,73 +244,91 @@ class MainViewController: NSViewController, dropFileDelegate {
         } catch {
             showErrorMessage(errorMsg: "读取数据失败。")
             self.clearUI()
-            return
+            return nil
         }
         
         
-        var musicName: String = ""
-        var albumName: String = ""
-        var albumImageLink: String = ""
-        var artistNameArray: [String] = []
-        var musicFormat: MusicFormat
-        var musicId: Int = 0
-        var duration: Int = 0
-        var bitRate: Int = 0
+//        var musicName: String = ""
+//        var albumName: String = ""
+//        var albumImageLink: String = ""
+//        var artistNameArray: [String] = []
+//        var musicFormat: MusicFormat
+//        var musicId: Int = 0
+//        var duration: Int = 0
+//        var bitRate: Int = 0
+//
+        let music = Music()
         
         do {
             let musicInfo = String(cString: &metaData)
             print(musicInfo)
             let musicMeta = try JSON(data: musicInfo.data(using: .utf8)!)
-            musicName = musicMeta["musicName"].stringValue
-            albumName = musicMeta["album"].stringValue
-            duration = musicMeta["duration"].intValue
-            albumImageLink = musicMeta["albumPic"].stringValue
-            bitRate = musicMeta["bitrate"].intValue
-            musicId = musicMeta["musicId"].intValue
+            music.title = musicMeta["musicName"].stringValue
+            music.album = musicMeta["album"].stringValue
+            music.duration = musicMeta["duration"].intValue
+            music.albumCoverLink = musicMeta["albumPic"].stringValue
+            music.bitRate = musicMeta["bitrate"].intValue
+            music.musicId = musicMeta["musicId"].intValue
             switch musicMeta["format"].stringValue {
             case "mp3":
-                musicFormat = .mp3
+                music.format = .mp3
                 break
             case "flac":
-                musicFormat = .flac
+                music.format = .flac
                 break
             default:
-                musicFormat = .unknown
+                music.format = .unknown
                 break
             }
-            self.readyFileType = musicFormat
+            self.readyFileType = music.format
             if let artistArray = musicMeta["artist"].array {
                 for index in 0..<artistArray.count {
-                    artistNameArray.append(artistArray[index][0].stringValue)
+                    music.artists.append(artistArray[index][0].stringValue)
                 }
             }
         } catch {
             showErrorMessage(errorMsg: "文件元数据解析失败。")
             self.clearUI()
-            return
+            return nil
         }
 
-        DispatchQueue.global().async {
-            // 新开一个线程读图片
+        if !batch {
+            DispatchQueue.global().async {
+                // 新开一个线程读图片
+                do {
+                    let image = try NSImage(data: Data(contentsOf: URL(string: music.albumCoverLink)!))
+                    DispatchQueue.main.async {
+                        music.albumCover = image
+                        self.albumView.image = image
+                        self.albumView.title = ""
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        self.showInfo(infoMsg: "未能加载服务器端的专辑封面。\n\n将会使用 ncm 文件内嵌的专辑封面。")
+                        // 其实两个没啥区别…
+                    }
+                }
+            }
+        } else {
             do {
-                let image = try NSImage(data: Data(contentsOf: URL(string: albumImageLink)!))
+                let image = try NSImage(data: Data(contentsOf: URL(string: music.albumCoverLink)!))
                 DispatchQueue.main.async {
+                    music.albumCover = image
                     self.albumView.image = image
                     self.albumView.title = ""
                 }
             } catch {
-                DispatchQueue.main.async {
-                    self.showInfo(infoMsg: "未能加载服务器端的专辑封面。\n\n将会使用 ncm 文件内嵌的专辑封面。")
+                print("未能加载服务器端的专辑封面。\n\n将会使用 ncm 文件内嵌的专辑封面。")
                     // 其实两个没啥区别…
-                }
             }
         }
         
-        self.titleTextField.stringValue = "标题：\(musicName)"
-        self.albumTextField.stringValue = "专辑：\(albumName)"
-        self.artistTextField.stringValue = "艺术家：\(artistNameArray.joined(separator: ", "))"
-        self.formatTextField.stringValue = "格式：\(getFormat(musicFormat, bitRate, duration))"
-        
+        DispatchQueue.main.async {
+            self.titleTextField.stringValue = "标题：\(music.title)"
+            self.albumTextField.stringValue = "专辑：\(music.album)"
+            self.artistTextField.stringValue = "艺术家：\(music.artists.joined(separator: " / "))"
+            self.formatTextField.stringValue = "格式：\(getFormat(music.format, music.bitRate, music.duration))"
+        }
 
         
         // 继续往下读 CRC32 校验和
@@ -303,34 +356,28 @@ class MainViewController: NSViewController, dropFileDelegate {
         // 就算决定不用本地的版本
         // 也还是要 read 出来这么多字节
         // 否则后面没法继续
-        if self.albumView.image == nil {
-            self.albumView.image = NSImage(data: Data(bytes: imageData))
-            self.albumView.title = ""
+        if music.albumCover == nil {
+            music.albumCover = NSImage(data: Data(bytes: imageData))
+            DispatchQueue.main.async {
+                self.albumView.image = music.albumCover
+                self.albumView.title = ""
+            }
         }
         
-        let id3Tag = ID3Tag(
-            version: .version3,
-            artist: artistNameArray.joined(separator: ", "),
-            albumArtist: artistNameArray.joined(separator: ", "),
-            album: albumName,
-            title: musicName,
-            recordingDateTime: nil,
-            genre: nil,
-            attachedPictures: [AttachedPicture(picture: (self.albumView.image?.tiffRepresentation)!, type: .FrontCover, format: .Jpeg)],
-            trackPosition: nil
-            )
+        let id3Tag = music.getTag()
         self.musicTag = id3Tag
-        self.globalMusicId = musicId
+        self.globalMusicId = music.musicId
         
         let realDeKeyData = Array(deKeyData[17..<(deKeyData.count)])
         // 从第 17 位开始取 deKeyData
         // 创建新的 realDeKeyData 并用它生成 keyBox
         self.keyBox = buildKeyBox(key: realDeKeyData)
-        
-        self.exportButton.isEnabled = true
+        if !batch {
+            self.exportButton.isEnabled = true
+        }
+        return path + "\(music.generateFileName())"
     }
 
-    
     func startOutput(inStream: InputStream, outStream: OutputStream, path: String) {
         outStream.open()
         let bufSize = 0x8000
@@ -346,7 +393,28 @@ class MainViewController: NSViewController, dropFileDelegate {
         inStream.close()
         outStream.close()
         writeMetaInfo(path)
-        self.showInfo(infoMsg: "成功输出文件到 \(path)。\n\n预计 CRC32 校验和：\(crc32Check)。")
+        DispatchQueue.main.async {
+            self.showInfo(infoMsg: "成功输出文件到 \(path)。\n\n校验和：\(self.crc32Check)。")
+            // 其实也不知道这个校验码有啥用……跟生成的文件 crc32 并不匹配
+            self.clearUI()
+        }
+    }
+    
+    func startOutputBatch(inStream: InputStream, outStream: OutputStream, path: String) {
+        outStream.open()
+        let bufSize = 0x8000
+        var buffer: [UInt8] = [UInt8](repeating: 0, count: bufSize)
+        while inStream.hasBytesAvailable {
+            inStream.read(&buffer, maxLength: bufSize)
+            for i in 0..<bufSize {
+                let j = (i + 1) & 0xff;
+                buffer[i] ^= keyBox[Int((keyBox[j] &+ keyBox[Int((keyBox[j] &+ UInt8(j)) & 0xff)]) & 0xff)]
+            }
+            outStream.write(&buffer, maxLength: bufSize)
+        }
+        inStream.close()
+        outStream.close()
+        writeMetaInfo(path)
     }
     
     func writeMetaInfo(_ filePath: String) {
@@ -355,7 +423,8 @@ class MainViewController: NSViewController, dropFileDelegate {
                 let id3TagEditor = ID3TagEditor()
                 try id3TagEditor.write(tag: self.musicTag!, to: filePath)
             } catch {
-                showErrorMessage(errorMsg: "未能成功写入元数据信息。")
+//                showErrorMessage(errorMsg: "未能成功写入元数据信息。")
+//                flac 格式没办法写 tag 信息……
             }
         }
     }
@@ -372,6 +441,15 @@ class MainViewController: NSViewController, dropFileDelegate {
         infoAlert.messageText = infoMsg
         infoAlert.alertStyle = NSAlert.Style.informational
         infoAlert.beginSheetModal(for: self.view.window!, completionHandler: nil)
+    }
+    
+    func askQuestion(question: String) -> Bool {
+        let questionAlert: NSAlert = NSAlert()
+        questionAlert.messageText = question
+        questionAlert.alertStyle = NSAlert.Style.critical
+        questionAlert.addButton(withTitle: "替换")
+        questionAlert.addButton(withTitle: "取消")
+        return questionAlert.runModal() == NSApplication.ModalResponse.alertFirstButtonReturn
     }
     
     func clearUI() {

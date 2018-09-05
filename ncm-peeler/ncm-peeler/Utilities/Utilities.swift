@@ -31,6 +31,7 @@ let defaultUrl = URL(string: "https://avatars0.githubusercontent.com/u/34335406?
 // when the url is invalid, which is not very likely,
 // put my github photo on it.
 
+
 enum MusicFormat {
     case mp3
     case flac
@@ -80,4 +81,5 @@ func secondsToFormat(_ seconds: Int) -> String {
 
 protocol dropFileDelegate {
     func onFileDrop(_ path: String) -> ()
+    func openBatch(_ array: NSArray) -> ()
 }

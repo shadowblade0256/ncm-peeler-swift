@@ -12,43 +12,41 @@
                 <application id="hnw-xV-0zn" sceneMemberID="viewController">
                     <menu key="mainMenu" title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
                         <items>
-                            <menuItem title="ncm-peeler" id="1Xt-HY-uBw">
+                            <menuItem title="NCM Peeler" id="1Xt-HY-uBw">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="ncm-peeler" systemMenu="apple" id="uQy-DD-JDr">
+                                <menu key="submenu" title="NCM Peeler" systemMenu="apple" id="uQy-DD-JDr">
                                     <items>
-                                        <menuItem title="About ncm-peeler" id="5kV-Vb-QxS">
+                                        <menuItem title="关于" id="5kV-Vb-QxS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="orderFrontStandardAboutPanel:" target="Ady-hI-5gd" id="Exp-CZ-Vem"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="VOq-y0-SEH"/>
-                                        <menuItem title="Preferences…" keyEquivalent="," id="BOF-NM-1cW"/>
-                                        <menuItem isSeparatorItem="YES" id="wFC-TO-SCJ"/>
-                                        <menuItem title="Services" id="NMo-om-nkz">
+                                        <menuItem title="服务" id="NMo-om-nkz">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <menu key="submenu" title="Services" systemMenu="services" id="hz9-B4-Xy5"/>
+                                            <menu key="submenu" title="服务" systemMenu="services" id="hz9-B4-Xy5"/>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="4je-JR-u6R"/>
-                                        <menuItem title="Hide ncm-peeler" keyEquivalent="h" id="Olw-nP-bQN">
+                                        <menuItem title="隐藏" keyEquivalent="h" id="Olw-nP-bQN">
                                             <connections>
                                                 <action selector="hide:" target="Ady-hI-5gd" id="PnN-Uc-m68"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Hide Others" keyEquivalent="h" id="Vdr-fp-XzO">
+                                        <menuItem title="隐藏其他" keyEquivalent="h" id="Vdr-fp-XzO">
                                             <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                             <connections>
                                                 <action selector="hideOtherApplications:" target="Ady-hI-5gd" id="VT4-aY-XCT"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Show All" id="Kd2-mp-pUS">
+                                        <menuItem title="全部显示" id="Kd2-mp-pUS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="unhideAllApplications:" target="Ady-hI-5gd" id="Dhg-Le-xox"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem isSeparatorItem="YES" id="kCx-OE-vgT"/>
-                                        <menuItem title="Quit ncm-peeler" keyEquivalent="q" id="4sb-4s-VLi">
+                                        <menuItem title="退出" keyEquivalent="q" id="4sb-4s-VLi">
                                             <connections>
                                                 <action selector="terminate:" target="Ady-hI-5gd" id="Te7-pn-YzF"/>
                                             </connections>
@@ -56,11 +54,11 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Help" id="wpr-3q-Mcd">
+                            <menuItem title="帮助" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
+                                <menu key="submenu" title="帮助" systemMenu="help" id="F2S-fz-NVQ">
                                     <items>
-                                        <menuItem title="ncm-peeler Help" keyEquivalent="?" id="FKE-Sm-Kum">
+                                        <menuItem title="ncm-peeler 帮助" keyEquivalent="?" id="FKE-Sm-Kum">
                                             <connections>
                                                 <action selector="showHelp:" target="Ady-hI-5gd" id="y7X-2Q-9no"/>
                                             </connections>
@@ -111,7 +109,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yf3-zd-jUN">
-                                <rect key="frame" x="388" y="13" width="78" height="32"/>
+                                <rect key="frame" x="369" y="13" width="97" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                 <buttonCell key="cell" type="push" title="导出..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="OfR-UP-9M6">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -131,7 +129,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8rh-sd-oRk">
-                                <rect key="frame" x="295" y="103" width="167" height="92"/>
+                                <rect key="frame" x="295" y="143" width="167" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" alignment="left" title="转化为 mp3 或 flac 格式。" id="YsT-qf-d4z">
                                     <font key="font" metaFont="system"/>
@@ -149,7 +147,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JaV-2L-r7K">
-                                <rect key="frame" x="295" y="47" width="165" height="51"/>
+                                <rect key="frame" x="295" y="49" width="165" height="86"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <textFieldCell key="cell" selectable="YES" alignment="left" title="元数据会得到保留。" id="DJ7-0l-R38">
                                     <font key="font" metaFont="system"/>
@@ -196,7 +194,6 @@
                         <outlet property="albumTextField" destination="o6K-ys-LDm" id="cP8-mH-Ghk"/>
                         <outlet property="albumView" destination="d5a-vv-3xf" id="vEt-gD-Yhf"/>
                         <outlet property="artistTextField" destination="8rh-sd-oRk" id="Ehq-vm-iht"/>
-                        <outlet property="dragView" destination="m2S-Jp-Qdl" id="TU9-Xd-hCd"/>
                         <outlet property="exportButton" destination="yf3-zd-jUN" id="QkN-et-9b9"/>
                         <outlet property="formatTextField" destination="JaV-2L-r7K" id="Qw0-Ky-IcK"/>
                         <outlet property="titleTextField" destination="xY5-Fe-rMu" id="fPZ-bW-37E"/>
