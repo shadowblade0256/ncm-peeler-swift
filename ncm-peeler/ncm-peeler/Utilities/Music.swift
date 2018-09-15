@@ -13,6 +13,7 @@ class Music: NSObject {
     var title: String = ""
     var musicId: Int = 0
     var artists: [String] = []
+    var aliasNames: [String] = []
     var album: String = ""
     var albumCover: NSImage?
     var albumCoverLink: String = ""

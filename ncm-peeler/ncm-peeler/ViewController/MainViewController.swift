@@ -19,7 +19,7 @@ class MainViewController: NSViewController, dropFileDelegate {
             self.clearUI()
             self.globalInStream = inputStream
             print(path)
-            self.startAnalyse(inStream: inputStream!, path: path)
+            print(self.startAnalyse(inStream: inputStream!, path: path) ?? "analyse returned nil")
         }
     }
     
@@ -81,11 +81,12 @@ class MainViewController: NSViewController, dropFileDelegate {
     var canOutput: Bool = false
     var musicTag: ID3Tag?
     var globalMusicId: Int = 0
+    var creditsWindowController: NSWindowController?
     
     @IBAction func openCredits(_ sender: NSButton) {
-        let storyboard = NSStoryboard(name: "Main", bundle: nil)
-        let creditsWindowController = storyboard.instantiateController(withIdentifier: "Credits Window Controller") as! NSWindowController
-        creditsWindowController.showWindow(sender)
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
+        creditsWindowController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Credits Window Controller")) as? NSWindowController
+        creditsWindowController?.showWindow(sender)
     }
     
     @IBAction func browseNcmFile(_ sender: NSButton) {
@@ -102,7 +103,7 @@ class MainViewController: NSViewController, dropFileDelegate {
                         self.clearUI()
                         self.globalInStream = inputStream
                         print((ncmUrl?.path)!)
-                        self.startAnalyse(inStream: inputStream!)
+                        print(self.startAnalyse(inStream: inputStream!) ?? "analyse returned nil")
                     }
                 } else if openNcmPanel.urls.count > 1 {
                     var paths: NSArray = []
@@ -286,6 +287,19 @@ class MainViewController: NSViewController, dropFileDelegate {
                     music.artists.append(artistArray[index][0].stringValue)
                 }
             }
+            
+            if let aliasNames = musicMeta["alias"].array {
+                for index in 0..<aliasNames.count {
+                    music.aliasNames.append(aliasNames[index].stringValue)
+                }
+            }
+            
+            if let transNames = musicMeta["transNames"].array {
+                for index in 0..<transNames.count {
+                    music.aliasNames.append(transNames[index].stringValue)
+                }
+            }
+            
         } catch {
             showErrorMessage(errorMsg: "文件元数据解析失败。")
             self.clearUI()
@@ -324,7 +338,12 @@ class MainViewController: NSViewController, dropFileDelegate {
         }
         
         DispatchQueue.main.async {
-            self.titleTextField.stringValue = "标题：\(music.title)"
+            self.titleTextField.stringValue = "\(music.title)"
+            if music.aliasNames.count > 1 {
+                self.titleTextField.stringValue += " (\(music.aliasNames.joined(separator: " / ")))"
+            } else if music.aliasNames.count == 1 {
+                self.titleTextField.stringValue += " (\(music.aliasNames[0]))"
+            }
             self.albumTextField.stringValue = "专辑：\(music.album)"
             self.artistTextField.stringValue = "艺术家：\(music.artists.joined(separator: " / "))"
             self.formatTextField.stringValue = "格式：\(getFormat(music.format, music.bitRate, music.duration))"

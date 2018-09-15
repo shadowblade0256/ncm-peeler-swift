@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 48;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,7 +17,6 @@
 		8A6D73D6213ECE1C001119C1 /* ID3TagEditor.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6D73D5213ECE1C001119C1 /* ID3TagEditor.framework */; };
 		8A6D73D8213ECE20001119C1 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A6D73D7213ECE20001119C1 /* SwiftyJSON.framework */; };
 		8A6D73DC213ED14B001119C1 /* DragableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D73DB213ED14B001119C1 /* DragableButton.swift */; };
-		8A76FA91213F6CAF00439D02 /* BatchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */; };
 		8A76FA93213F6FF400439D02 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA92213F6FF400439D02 /* Music.swift */; };
 		8A76FA96213F744500439D02 /* musicParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA95213F744500439D02 /* musicParser.swift */; };
 		8A7D1BC4213D135B002AD4D5 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */; };
@@ -39,12 +38,11 @@
 		8A6D73D5213ECE1C001119C1 /* ID3TagEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ID3TagEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A6D73D7213ECE20001119C1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A6D73DB213ED14B001119C1 /* DragableButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragableButton.swift; sourceTree = "<group>"; };
-		8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BatchViewController.xib; sourceTree = "<group>"; };
 		8A76FA92213F6FF400439D02 /* Music.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Music.swift; sourceTree = "<group>"; };
 		8A76FA95213F744500439D02 /* musicParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = musicParser.swift; sourceTree = "<group>"; };
 		8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ACF7590213E2A0400EC5A47 /* ncm-peeler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "ncm-peeler.entitlements"; sourceTree = "<group>"; };
-		8ACF7591213E328A00EC5A47 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = Podfile; sourceTree = "<group>"; };
+		8ACF7591213E328A00EC5A47 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; path = Podfile; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B0F48DC667EDD8D0E85AB6B7 /* Pods_ncm_peeler.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ncm_peeler.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -101,7 +99,6 @@
 				8ACF7590213E2A0400EC5A47 /* ncm-peeler.entitlements */,
 				8A1582B4213D08E8000E675C /* AppDelegate.swift */,
 				8A1582BB213D08E9000E675C /* Assets.xcassets */,
-				8A76FA8F213F6CAF00439D02 /* BatchViewController.xib */,
 				8A1582BD213D08E9000E675C /* Main.storyboard */,
 				8A1582C0213D08E9000E675C /* Info.plist */,
 				8A1582C1213D08E9000E675C /* ncm_peeler.entitlements */,
@@ -172,6 +169,7 @@
 				TargetAttributes = {
 					8A1582B0213D08E8000E675C = {
 						CreatedOnToolsVersion = 10.0;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 1;
@@ -181,7 +179,7 @@
 				};
 			};
 			buildConfigurationList = 8A1582AC213D08E8000E675C /* Build configuration list for PBXProject "ncm-peeler" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -204,7 +202,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8ACF7592213E328A00EC5A47 /* Podfile in Resources */,
-				8A76FA91213F6CAF00439D02 /* BatchViewController.xib in Resources */,
 				8A1582BC213D08E9000E675C /* Assets.xcassets in Resources */,
 				8A1582BF213D08E9000E675C /* Main.storyboard in Resources */,
 			);
@@ -218,8 +215,6 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
@@ -227,8 +222,6 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ID3TagEditor.framework",
@@ -244,15 +237,11 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputFileListPaths = (
-			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ncm-peeler-checkManifestLockResult.txt",
 			);
@@ -402,8 +391,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -418,15 +406,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 24XARD42BP;
 				INFOPLIST_FILE = "ncm-peeler/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = yue.ncm.peeler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -441,15 +426,12 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 24XARD42BP;
 				INFOPLIST_FILE = "ncm-peeler/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = yue.ncm.peeler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};

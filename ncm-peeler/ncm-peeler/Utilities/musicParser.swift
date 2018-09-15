@@ -105,7 +105,7 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     //        var duration: Int = 0
     //        var bitRate: Int = 0
     //
-    var music = Music()
+    let music = Music()
     
     do {
         let musicInfo = String(cString: &metaData)

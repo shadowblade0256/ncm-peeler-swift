@@ -18,7 +18,8 @@ class DragableButton: NSButton {
         super.init(coder: coder)
         self.wantsLayer = true
         self.layer?.backgroundColor = NSColor.gray.cgColor
-        registerForDraggedTypes([NSPasteboard.PasteboardType.URL, NSPasteboard.PasteboardType.fileURL])
+//        self.registerForDraggedTypes([NSURLPboardType])
+        self.registerForDraggedTypes([NSPasteboard.PasteboardType.backwardsCompatibleFileURL])
     }
     
     override func draw(_ dirtyRect: NSRect) {
@@ -36,7 +37,7 @@ class DragableButton: NSButton {
     }
     
     fileprivate func checkExtension(_ drag: NSDraggingInfo) -> Bool {
-        guard let board = drag.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
+        guard let board = drag.draggingPasteboard().propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = board[0] as? String
             else { return false }
         
@@ -58,7 +59,7 @@ class DragableButton: NSButton {
     }
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
+        guard let pasteboard = sender.draggingPasteboard().propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = pasteboard[0] as? String
             else { return false }
         if pasteboard.count == 1 {
@@ -69,4 +70,10 @@ class DragableButton: NSButton {
             return true
         }
     }
+}
+
+extension NSPasteboard.PasteboardType {
+    static let backwardsCompatibleFileURL: NSPasteboard.PasteboardType = {
+        return NSPasteboard.PasteboardType("NSFilenamesPboardType")
+    }()
 }
