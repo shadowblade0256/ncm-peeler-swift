@@ -19,7 +19,6 @@
 		8A6D73DC213ED14B001119C1 /* DragableButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A6D73DB213ED14B001119C1 /* DragableButton.swift */; };
 		8A76FA93213F6FF400439D02 /* Music.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA92213F6FF400439D02 /* Music.swift */; };
 		8A76FA96213F744500439D02 /* musicParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A76FA95213F744500439D02 /* musicParser.swift */; };
-		8A7D1BC4213D135B002AD4D5 /* CryptoSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D1BC3213D135B002AD4D5 /* CryptoSwift.framework */; };
 		8ACF7592213E328A00EC5A47 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 8ACF7591213E328A00EC5A47 /* Podfile */; };
 /* End PBXBuildFile section */
 
@@ -53,7 +52,6 @@
 			files = (
 				8A6D73D8213ECE20001119C1 /* SwiftyJSON.framework in Frameworks */,
 				8A6D73D6213ECE1C001119C1 /* ID3TagEditor.framework in Frameworks */,
-				8A7D1BC4213D135B002AD4D5 /* CryptoSwift.framework in Frameworks */,
 				86C339C2B60603C82D8687D6 /* Pods_ncm_peeler.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -146,7 +144,7 @@
 				8A1582AD213D08E8000E675C /* Sources */,
 				8A1582AE213D08E8000E675C /* Frameworks */,
 				8A1582AF213D08E8000E675C /* Resources */,
-				05892457EF9C6CFFD9EC2A98 /* [CP] Embed Pods Frameworks */,
+				38A355F38D287F36C8D49D76 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -169,7 +167,7 @@
 				TargetAttributes = {
 					8A1582B0213D08E8000E675C = {
 						CreatedOnToolsVersion = 10.0;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
 								enabled = 1;
@@ -210,7 +208,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		05892457EF9C6CFFD9EC2A98 /* [CP] Embed Pods Frameworks */ = {
+		38A355F38D287F36C8D49D76 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -400,11 +398,11 @@
 			baseConfigurationReference = 58B41CA0FADC99F682D2295A /* Pods-ncm-peeler.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ncm-peeler/ncm-peeler.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 24XARD42BP;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ncm-peeler/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
@@ -420,11 +418,11 @@
 			baseConfigurationReference = 86C6574F01E6EBFF355C8B07 /* Pods-ncm-peeler.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "ncm-peeler/ncm-peeler.entitlements";
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 24XARD42BP;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = "ncm-peeler/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;

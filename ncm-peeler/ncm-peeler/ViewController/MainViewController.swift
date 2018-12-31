@@ -7,9 +7,9 @@
 //
 
 import Cocoa
-import CryptoSwift
 import SwiftyJSON
 import ID3TagEditor
+import CryptoSwift
 
 class MainViewController: NSViewController, dropFileDelegate {
     
