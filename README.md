@@ -4,3 +4,17 @@
 + 把 ncm 格式（网易云加密音乐格式）转化为 mp3 或 flac 格式文件。
 
 + 保留标题、专辑、歌手、封面等元数据。
+
+## 最近更新
+
++ 支持多线程转换
+
++ 重写导入文件逻辑
+
++ 支持自定义导出目录／保存在原始文件旁
+
++ 支持转换完成后删除 ncm 文件
+
+## 屏幕截图
+
+![](https://raw.githubusercontent.com/yuxiqian/ncm-peeler-swift/master/imgs/main.png)
