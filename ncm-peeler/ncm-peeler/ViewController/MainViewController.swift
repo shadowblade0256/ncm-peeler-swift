@@ -340,12 +340,12 @@ class MainViewController: NSViewController, dropFileDelegate {
         DispatchQueue.main.async {
             self.titleTextField.stringValue = "\(music.title)"
             if music.aliasNames.count > 1 {
-                self.titleTextField.stringValue += " (\(music.aliasNames.joined(separator: " / ")))"
+                self.titleTextField.stringValue += " (\(music.aliasNames.joined(separator: "/")))"
             } else if music.aliasNames.count == 1 {
                 self.titleTextField.stringValue += " (\(music.aliasNames[0]))"
             }
             self.albumTextField.stringValue = "专辑：\(music.album)"
-            self.artistTextField.stringValue = "艺术家：\(music.artists.joined(separator: " / "))"
+            self.artistTextField.stringValue = "艺术家：\(music.artists.joined(separator: "/"))"
             self.formatTextField.stringValue = "格式：\(getFormat(music.format, music.bitRate, music.duration))"
         }
 
@@ -487,4 +487,6 @@ class MainViewController: NSViewController, dropFileDelegate {
         self.crc32Check = 0
         self.canOutput = false
     }
+    
+    
 }

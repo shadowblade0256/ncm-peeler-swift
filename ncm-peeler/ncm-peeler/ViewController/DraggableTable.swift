@@ -1,16 +1,22 @@
 //
-//  DragableButton.swift
+//  DraggableTable.swift
 //  ncm-peeler
 //
-//  Created by yuxiqian on 2018/9/4.
-//  Copyright © 2018 yuxiqian. All rights reserved.
+//  Created by yuxiqian on 2019/1/20.
+//  Copyright © 2019 yuxiqian. All rights reserved.
 //
 
 import Cocoa
 
-class DragableButton: NSButton {
+class DraggableTable: NSTableView {
+
+    override func draw(_ dirtyRect: NSRect) {
+        super.draw(dirtyRect)
+
+        // Drawing code here.
+    }
     
-    var delegate: dropFileDelegate?
+    var dropDelegate: dropFileDelegate?
     var filePath: String?
     let expectedExt = ["ncm"]
     
@@ -18,14 +24,10 @@ class DragableButton: NSButton {
         super.init(coder: coder)
         self.wantsLayer = true
         self.layer?.backgroundColor = NSColor.gray.cgColor
-//        self.registerForDraggedTypes([NSURLPboardType])
+        //        self.registerForDraggedTypes([NSURLPboardType])
         self.registerForDraggedTypes([NSPasteboard.PasteboardType.backwardsCompatibleFileURL])
     }
-    
-    override func draw(_ dirtyRect: NSRect) {
-        super.draw(dirtyRect)
-        // Drawing code here.
-    }
+
     
     override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         if checkExtension(sender) == true {
@@ -72,3 +74,8 @@ class DragableButton: NSButton {
     }
 }
 
+extension NSPasteboard.PasteboardType {
+    static let backwardsCompatibleFileURL: NSPasteboard.PasteboardType = {
+        return NSPasteboard.PasteboardType("NSFilenamesPboardType")
+    }()
+}

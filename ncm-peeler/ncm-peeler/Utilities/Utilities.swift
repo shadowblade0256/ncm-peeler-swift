@@ -7,15 +7,18 @@
 //
 
 import Foundation
+import ID3TagEditor
 
 func fourUInt8Combine(_ array: inout [UInt8]) -> UInt32 {
-    array.reverse()
-    // 需要先 reverse bytes 再进行合并
+//    array.reverse()
     let data = NSData(bytes: array, length: 4)
     // 调用时保证传入四字节
     var value : UInt32 = 0
     data.getBytes(&value, length: 4)
-    value = UInt32(bigEndian: value)
+  
+//    value = UInt32(bigEndian: value)
+    value = UInt32(littleEndian: value)
+//   对不起…现在明白 little 和 big endian 了
     return value
 }
 
@@ -32,10 +35,10 @@ let defaultUrl = URL(string: "https://avatars0.githubusercontent.com/u/34335406?
 // put my github photo on it.
 
 
-enum MusicFormat {
-    case mp3
-    case flac
-    case unknown
+enum MusicFormat: String {
+    case mp3 = "mp3"
+    case flac = "flac"
+    case unknown = "未知格式"
 }
 
 func getFormat(_ Format: MusicFormat, _ bitRate: Int, _ duration: Int) -> String {
@@ -82,4 +85,16 @@ func secondsToFormat(_ seconds: Int) -> String {
 protocol dropFileDelegate {
     func onFileDrop(_ path: String) -> ()
     func openBatch(_ array: NSArray) -> ()
+}
+
+func writeMetaInfo(musicTag: ID3Tag?, _ filePath: String) {
+    if musicTag != nil {
+        do {
+            let id3TagEditor = ID3TagEditor()
+            try id3TagEditor.write(tag: musicTag!, to: filePath)
+        } catch {
+            NSLog("未能成功写入元数据信息。")
+            //                flac 格式没办法写 tag 信息……
+        }
+    }
 }

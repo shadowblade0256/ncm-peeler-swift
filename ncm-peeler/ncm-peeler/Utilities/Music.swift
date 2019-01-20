@@ -36,12 +36,16 @@ class Music: NSObject {
         )
     }
     
+    func getArtist() -> String {
+        return self.artists.joined(separator: " / ")
+    }
+    
     func getTime() -> String {
-        return String(format: "%d:%02d", arguments: [Int(self.duration / 60), self.duration % 60])
+        return secondsToFormat(Int(self.duration / 1000))
     }
     
     func getBitRate() -> String {
-        return "\(Int(bitRate / 1000))kbit/s"
+        return "\(Int(self.bitRate / 1000))kbit/s"
     }
     
     func generateFileName() -> String {

@@ -21,7 +21,6 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     var metaData: [UInt8] = []
     var crc32CheckBuf: [UInt8] = []
     var imageSizeBuf: [UInt8] = []
-    inStream.open()
     
     do {
         headerBuf = [UInt8](repeating: 0, count: 8)
@@ -32,7 +31,7 @@ func readMetaInfo(inStream: InputStream) -> Music? {
                 return nil
             }
         }
-        print("file head matched.")
+        NSLog("file head matched.")
         
         tmpBuf = [UInt8](repeating: 0, count: 2)
         inStream.read(&tmpBuf, maxLength: tmpBuf.count)
