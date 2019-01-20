@@ -11,7 +11,7 @@
 		8A027AAE21F4423C00EB1162 /* BatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A027AAD21F4423C00EB1162 /* BatchViewController.swift */; };
 		8A027AB021F442A000EB1162 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A027AAF21F442A000EB1162 /* Session.swift */; };
 		8A1582B5213D08E8000E675C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B4213D08E8000E675C /* AppDelegate.swift */; };
-		8A1582B7213D08E8000E675C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B6213D08E8000E675C /* MainViewController.swift */; };
+		8A1582B7213D08E8000E675C /* [Deprecated]MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B6213D08E8000E675C /* [Deprecated]MainViewController.swift */; };
 		8A1582BA213D08E8000E675C /* ncm_peeler.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B8213D08E8000E675C /* ncm_peeler.xcdatamodeld */; };
 		8A1582BC213D08E9000E675C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1582BB213D08E9000E675C /* Assets.xcassets */; };
 		8A1582BF213D08E9000E675C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8A1582BD213D08E9000E675C /* Main.storyboard */; };
@@ -31,7 +31,7 @@
 		8A027AAF21F442A000EB1162 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		8A1582B1213D08E8000E675C /* ncm-peeler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ncm-peeler.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1582B4213D08E8000E675C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8A1582B6213D08E8000E675C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		8A1582B6213D08E8000E675C /* [Deprecated]MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "[Deprecated]MainViewController.swift"; sourceTree = "<group>"; };
 		8A1582B9213D08E8000E675C /* ncm_peeler.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ncm_peeler.xcdatamodel; sourceTree = "<group>"; };
 		8A1582BB213D08E9000E675C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A1582BE213D08E9000E675C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 		8A76FA8D213F6C7500439D02 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				8A1582B6213D08E8000E675C /* MainViewController.swift */,
+				8A1582B6213D08E8000E675C /* [Deprecated]MainViewController.swift */,
 				8A6D73DB213ED14B001119C1 /* DragableButton.swift */,
 				8A027AAD21F4423C00EB1162 /* BatchViewController.swift */,
 			);
@@ -260,7 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A1582BA213D08E8000E675C /* ncm_peeler.xcdatamodeld in Sources */,
-				8A1582B7213D08E8000E675C /* MainViewController.swift in Sources */,
+				8A1582B7213D08E8000E675C /* [Deprecated]MainViewController.swift in Sources */,
 				8A76FA96213F744500439D02 /* musicParser.swift in Sources */,
 				8A1582CA213D0C36000E675C /* Utilities.swift in Sources */,
 				8A76FA93213F6FF400439D02 /* Music.swift in Sources */,

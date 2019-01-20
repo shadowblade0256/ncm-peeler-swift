@@ -108,6 +108,8 @@ class BatchViewController: NSViewController, dropFileDelegate {
     
     var loadingWC: NSWindowController?
     
+    var creditsWindowController: NSWindowController?
+    
     @IBAction func selectorClicked(_ sender: NSPathControl) {
         let openFolder = NSOpenPanel()
         openFolder.canChooseDirectories = true
@@ -176,7 +178,24 @@ class BatchViewController: NSViewController, dropFileDelegate {
         reloadBatchData()
     }
     
+    @IBAction func openCredits(_ sender: NSButton) {
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
+        creditsWindowController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Credits Window Controller")) as? NSWindowController
+        creditsWindowController?.showWindow(sender)
+    }
+    
+    @IBAction func openGitHub(_ sender: NSButton) {
+        if let url = URL(string: "https://github.com/yuxiqian/ncm-peeler-swift"), NSWorkspace.shared.open(url) {
+            // 成功打开
+        }
+    }
+    
     @IBAction func startBatchButtonClicked(_ sender: NSButton) {
+        
+        if self.outputPath == nil && self.putOriginChecker.state == .off {
+            showErrorMessage(errorMsg: "请指定一个输出目录。")
+            return
+        }
 
         
         let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
