@@ -9,10 +9,65 @@
 import Cocoa
 
 class BatchViewController: NSViewController, dropFileDelegate {
+    
+    func onFileDrop(_ path: String) {
+        var successCount = 0
+        let openSession = Session(ncmPath: path)
+        if openSession.isOk {
+            if !self.batchDataList.contains(where: { (element) -> Bool in
+                if element.filePath == path {
+                    return true
+                }
+                return false
+            }) {
+                self.batchDataList.append(openSession)
+                successCount += 1
+            }
+        }
+        if successCount != 0 {
+            self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
+            self.reloadBatchData()
+        } else {
+            self.showInfo(infoMsg: "未导入任何文件。")
+        }
+        updateStatus()
+    }
+    
+    func openBatch(_ array: NSArray) {
+        var successCount = 0
+        for p in array {
+            let path = p as! String
+            let openSession = Session(ncmPath: path)
+            if openSession.isOk {
+                if !self.batchDataList.contains(where: { (element) -> Bool in
+                    if element.filePath == path {
+                        return true
+                    }
+                    return false
+                }) {
+                    self.batchDataList.append(openSession)
+                    successCount += 1
+                }
+            }
+        }
+        if successCount != 0 {
+            self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
+            self.reloadBatchData()
+        } else {
+            self.showInfo(infoMsg: "未导入任何文件。")
+        }
+        updateStatus()
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do view setup here.
+        dragTarget.delegate = self
+        
+        self.removeButton.isEnabled = false
+        self.clearButton.isEnabled = false
+        
         dataTableView.delegate = self
         dataTableView.dataSource = self
         dataTableView.target = self
@@ -32,13 +87,14 @@ class BatchViewController: NSViewController, dropFileDelegate {
         
     }
     
-    @IBOutlet weak var dataTableView: NSTableView!
+    
     @IBOutlet weak var promptText: NSTextField!
-
+    @IBOutlet weak var dataTableView: NSTableView!
     @IBOutlet weak var addButton: NSButton!
     @IBOutlet weak var removeButton: NSButton!
     @IBOutlet weak var startBatchButton: NSButton!
     @IBOutlet weak var clearButton: NSButton!
+    @IBOutlet weak var dragTarget: DraggableButton!
     
     @IBAction func addButtonClicked(_ sender: NSButton) {
         let openNcmPanel = NSOpenPanel()
@@ -64,30 +120,41 @@ class BatchViewController: NSViewController, dropFileDelegate {
                 }
                 
                 if successCount != 0 {
+                    self.updateStatus()
                     self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
-                    self.promptText.stringValue = "已经导入 \(successCount) 则待处理文件。"
                     self.reloadBatchData()
                 } else {
                     self.showInfo(infoMsg: "未导入任何文件。")
-                    self.promptText.stringValue = "未导入任何文件。"
                 }
             }
         })
     }
     
     @IBAction func removeButtonClicked(_ sender: NSButton) {
+        let itemsSelected = dataTableView.selectedRowIndexes
+        
+        var newBatchList: [Session] = []
+        for i in 0..<batchDataList.count {
+            if !itemsSelected.contains(i) {
+                newBatchList.append(batchDataList[i])
+            }
+        }
+        batchDataList = newBatchList
+        reloadBatchData()
     }
     
     @IBAction func startBatchButtonClicked(_ sender: NSButton) {
     }
     
     @IBAction func clearButtonClicked(_ sender: NSButton) {
+        self.batchDataList.removeAll()
     }
     
     var batchDataList: [Session] = []
     
     func reloadBatchData() {
         self.dataTableView.reloadData()
+        self.updateStatus()
     }
 
     func sortArray(_ sortKey: String, _ isAscend: Bool) {
@@ -154,12 +221,21 @@ class BatchViewController: NSViewController, dropFileDelegate {
         
         if (batchDataList.count == 0) {
             text = "目前没有待处理文件。"
+            self.removeButton.isEnabled = false
+            self.clearButton.isEnabled = false
+            self.startBatchButton.isEnabled = false
         }
         else if (itemsSelected == 0) {
             text = "共有 \(batchDataList.count) 则待处理文件。"
+            self.removeButton.isEnabled = false
+            self.clearButton.isEnabled = true
+            self.startBatchButton.isEnabled = true
         }
         else {
             text = "\(batchDataList.count) 则待处理文件之中的 \(itemsSelected) 则被选中。"
+            self.removeButton.isEnabled = true
+            self.clearButton.isEnabled = true
+            self.startBatchButton.isEnabled = true
         }
        
         promptText.stringValue = text

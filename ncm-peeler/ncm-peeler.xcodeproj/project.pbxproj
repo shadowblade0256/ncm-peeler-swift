@@ -10,7 +10,6 @@
 		86C339C2B60603C82D8687D6 /* Pods_ncm_peeler.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0F48DC667EDD8D0E85AB6B7 /* Pods_ncm_peeler.framework */; };
 		8A027AAE21F4423C00EB1162 /* BatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A027AAD21F4423C00EB1162 /* BatchViewController.swift */; };
 		8A027AB021F442A000EB1162 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A027AAF21F442A000EB1162 /* Session.swift */; };
-		8A027AB221F45EE100EB1162 /* DraggableTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A027AB121F45EE100EB1162 /* DraggableTable.swift */; };
 		8A1582B5213D08E8000E675C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B4213D08E8000E675C /* AppDelegate.swift */; };
 		8A1582B7213D08E8000E675C /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B6213D08E8000E675C /* MainViewController.swift */; };
 		8A1582BA213D08E8000E675C /* ncm_peeler.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8A1582B8213D08E8000E675C /* ncm_peeler.xcdatamodeld */; };
@@ -30,7 +29,6 @@
 		86C6574F01E6EBFF355C8B07 /* Pods-ncm-peeler.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ncm-peeler.release.xcconfig"; path = "Pods/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler.release.xcconfig"; sourceTree = "<group>"; };
 		8A027AAD21F4423C00EB1162 /* BatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatchViewController.swift; sourceTree = "<group>"; };
 		8A027AAF21F442A000EB1162 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
-		8A027AB121F45EE100EB1162 /* DraggableTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggableTable.swift; sourceTree = "<group>"; };
 		8A1582B1213D08E8000E675C /* ncm-peeler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ncm-peeler.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1582B4213D08E8000E675C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8A1582B6213D08E8000E675C /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				8A1582B6213D08E8000E675C /* MainViewController.swift */,
 				8A6D73DB213ED14B001119C1 /* DragableButton.swift */,
 				8A027AAD21F4423C00EB1162 /* BatchViewController.swift */,
-				8A027AB121F45EE100EB1162 /* DraggableTable.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -264,7 +261,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A027AB221F45EE100EB1162 /* DraggableTable.swift in Sources */,
 				8A1582BA213D08E8000E675C /* ncm_peeler.xcdatamodeld in Sources */,
 				8A1582B7213D08E8000E675C /* MainViewController.swift in Sources */,
 				8A76FA96213F744500439D02 /* musicParser.swift in Sources */,

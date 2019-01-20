@@ -32,6 +32,12 @@ class Session {
         }
     }
     
+    deinit {
+        // 消失之前
+        // 先关闭流吧
+        self.istream?.close()
+    }
+    
     func output(outputPath: String) -> Bool {
         
         if !self.isOk {

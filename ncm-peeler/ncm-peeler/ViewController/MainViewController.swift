@@ -71,7 +71,7 @@ class MainViewController: NSViewController, dropFileDelegate {
     @IBOutlet weak var artistTextField: NSTextField!
     @IBOutlet weak var albumTextField: NSTextField!
     @IBOutlet weak var formatTextField: NSTextField!
-    @IBOutlet weak var albumView: DragableButton!
+    @IBOutlet weak var albumView: DraggableButton!
     @IBOutlet weak var exportButton: NSButton!
     
     var readyFileType: MusicFormat = .unknown
