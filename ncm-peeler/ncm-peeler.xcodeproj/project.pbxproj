@@ -36,7 +36,6 @@
 		8A1582BB213D08E9000E675C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A1582BE213D08E9000E675C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8A1582C0213D08E9000E675C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8A1582C1213D08E9000E675C /* ncm_peeler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ncm_peeler.entitlements; sourceTree = "<group>"; };
 		8A1582C9213D0C36000E675C /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		8A6D73D5213ECE1C001119C1 /* ID3TagEditor.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = ID3TagEditor.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A6D73D7213ECE20001119C1 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,7 +102,6 @@
 				8A1582BB213D08E9000E675C /* Assets.xcassets */,
 				8A1582BD213D08E9000E675C /* Main.storyboard */,
 				8A1582C0213D08E9000E675C /* Info.plist */,
-				8A1582C1213D08E9000E675C /* ncm_peeler.entitlements */,
 				8A1582B8213D08E8000E675C /* ncm_peeler.xcdatamodeld */,
 			);
 			path = "ncm-peeler";
@@ -176,7 +174,7 @@
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -406,7 +404,6 @@
 			baseConfigurationReference = 58B41CA0FADC99F682D2295A /* Pods-ncm-peeler.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -426,7 +423,6 @@
 			baseConfigurationReference = 86C6574F01E6EBFF355C8B07 /* Pods-ncm-peeler.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;

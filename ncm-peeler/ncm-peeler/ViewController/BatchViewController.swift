@@ -25,10 +25,10 @@ class BatchViewController: NSViewController, dropFileDelegate {
             }
         }
         if successCount != 0 {
-            self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
             self.reloadBatchData()
+            self.promptText.stringValue = "已经导入 \(successCount) 则待处理文件。"
         } else {
-            self.showInfo(infoMsg: "未导入任何文件。")
+            self.promptText.stringValue = "未导入任何文件。"
         }
         updateStatus()
     }
@@ -51,10 +51,10 @@ class BatchViewController: NSViewController, dropFileDelegate {
             }
         }
         if successCount != 0 {
-            self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
             self.reloadBatchData()
+            self.promptText.stringValue = "已经导入 \(successCount) 则待处理文件。"
         } else {
-            self.showInfo(infoMsg: "未导入任何文件。")
+            self.promptText.stringValue = "未导入任何文件。"
         }
         updateStatus()
     }
@@ -67,6 +67,8 @@ class BatchViewController: NSViewController, dropFileDelegate {
         
         self.removeButton.isEnabled = false
         self.clearButton.isEnabled = false
+        self.startBatchButton.isEnabled = false
+        self.pathController.isEnabled = false
         
         dataTableView.delegate = self
         dataTableView.dataSource = self
@@ -96,6 +98,37 @@ class BatchViewController: NSViewController, dropFileDelegate {
     @IBOutlet weak var clearButton: NSButton!
     @IBOutlet weak var dragTarget: DraggableButton!
     
+    @IBOutlet weak var pathController: NSPathControl!
+    @IBOutlet weak var putOriginChecker: NSButton!
+    @IBOutlet weak var removeThenChecker: NSButton!
+    
+    var outputPath: String?
+    
+    var shouldRemoveFile: Bool = false
+    
+    var loadingWC: NSWindowController?
+    
+    @IBAction func selectorClicked(_ sender: NSPathControl) {
+        let openFolder = NSOpenPanel()
+        openFolder.canChooseDirectories = true
+        openFolder.canChooseFiles = false
+        openFolder.beginSheetModal(for: self.view.window!, completionHandler: { returnCode in
+            if returnCode == NSApplication.ModalResponse.OK {
+                sender.url = openFolder.url
+                NSLog("Opened folder \(String(describing: openFolder.url?.path))")
+                self.outputPath = openFolder.url?.path
+            }
+        })
+    }
+    
+    @IBAction func putOriginCheckerChecked(_ sender: NSButton) {
+        pathController.isEnabled = (sender.state == .off)
+    }
+    
+    @IBAction func shouldDeleteCheckerChecked(_ sender: NSButton) {
+        self.shouldRemoveFile = (sender.state == .on)
+    }
+    
     @IBAction func addButtonClicked(_ sender: NSButton) {
         let openNcmPanel = NSOpenPanel()
         openNcmPanel.allowsMultipleSelection = true
@@ -120,12 +153,12 @@ class BatchViewController: NSViewController, dropFileDelegate {
                 }
                 
                 if successCount != 0 {
-                    self.updateStatus()
-                    self.showInfo(infoMsg: "已经导入 \(successCount) 则待处理文件。")
                     self.reloadBatchData()
+                    self.promptText.stringValue = "已经导入 \(successCount) 则待处理文件。"
                 } else {
-                    self.showInfo(infoMsg: "未导入任何文件。")
+                    self.promptText.stringValue = "未导入任何文件。"
                 }
+                self.updateStatus()
             }
         })
     }
@@ -144,10 +177,73 @@ class BatchViewController: NSViewController, dropFileDelegate {
     }
     
     @IBAction func startBatchButtonClicked(_ sender: NSButton) {
+
+        
+        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
+        loadingWC = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "LoadingWindowController")) as? NSWindowController
+
+        self.view.window!.beginSheet(loadingWC!.window!, completionHandler: nil)
+        
+        
+            self.promptText.stringValue = "准备开始 \(self.batchDataList.count) 例转换…"
+            let shouldPutOrigin: Bool = (self.putOriginChecker.state == .on)
+            for session in self.batchDataList {
+                DispatchQueue.global().async {
+                    if shouldPutOrigin {
+                        let result = session.output(outputPath: session.getOriginOutputPath())
+                            self.batchDataList.removeAll(where: { (element) -> Bool in
+                                if element.filePath == session.filePath {
+                                    return true
+                                }
+                                return false
+                            })
+                        DispatchQueue.main.async {
+                            self.reloadBatchData()
+                            if result {
+                                self.promptText.stringValue = "成功转换「\(session.musicObject!.title)」。" + self.promptText.stringValue
+                                if self.shouldRemoveFile {
+                                    session.deleteFile()
+                                }
+                            } else {
+                                self.promptText.stringValue = "未能转换「\(session.musicObject!.title)」。" + self.promptText.stringValue
+                            }
+                        }
+                    } else {
+                        let result = session.output(outputPath: self.outputPath! + session.musicObject!.generateFileName())
+                        
+                        self.batchDataList.removeAll(where: { (element) -> Bool in
+                            if element.filePath == session.filePath {
+                                return true
+                            }
+                            return false
+                        })
+                        DispatchQueue.main.async {
+                            self.reloadBatchData()
+                            if result {
+                                self.promptText.stringValue = "成功转换「\(session.musicObject!.title)」。" + self.promptText.stringValue
+                                if self.shouldRemoveFile {
+                                    session.deleteFile()
+                                }
+                            } else {
+                                self.promptText.stringValue = "未能转换「\(session.musicObject!.title)」。" + self.promptText.stringValue
+                                
+                            }
+                        }
+                    }
+                    
+                    if self.batchDataList.count == 0 {
+                        DispatchQueue.main.async {
+                            self.view.window?.endSheet(self.loadingWC!.window!)
+                            self.loadingWC = nil
+                        }
+                    }
+                }
+        }
     }
     
     @IBAction func clearButtonClicked(_ sender: NSButton) {
         self.batchDataList.removeAll()
+        reloadBatchData()
     }
     
     var batchDataList: [Session] = []
@@ -220,13 +316,13 @@ class BatchViewController: NSViewController, dropFileDelegate {
         let itemsSelected = dataTableView.selectedRowIndexes.count
         
         if (batchDataList.count == 0) {
-            text = "目前没有待处理文件。"
+            text = "现在没有待处理文件。"
             self.removeButton.isEnabled = false
             self.clearButton.isEnabled = false
             self.startBatchButton.isEnabled = false
         }
         else if (itemsSelected == 0) {
-            text = "共有 \(batchDataList.count) 则待处理文件。"
+            text = "现在有 \(batchDataList.count) 则文件待处理。"
             self.removeButton.isEnabled = false
             self.clearButton.isEnabled = true
             self.startBatchButton.isEnabled = true

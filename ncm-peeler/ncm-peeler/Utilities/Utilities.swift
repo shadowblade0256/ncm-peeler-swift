@@ -38,7 +38,7 @@ let defaultUrl = URL(string: "https://avatars0.githubusercontent.com/u/34335406?
 enum MusicFormat: String {
     case mp3 = "mp3"
     case flac = "flac"
-    case unknown = "未知格式"
+    case unknown = ""
 }
 
 func getFormat(_ Format: MusicFormat, _ bitRate: Int, _ duration: Int) -> String {

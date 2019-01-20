@@ -38,6 +38,34 @@ class Session {
         self.istream?.close()
     }
     
+    func deleteFile() {
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(atPath: self.filePath!)
+        } catch {
+            NSLog("Failed to delete file \(String(describing: self.filePath)).")
+        }
+    }
+    
+    func getOriginOutputPath() -> String {
+        
+        if self.filePath == nil {
+            return ""
+        }
+        if self.filePath!.count < 4 {
+            return ""
+        }
+        
+        let format = self.musicObject!.format.rawValue
+        
+        if self.filePath!.suffix(4) == ".ncm" {
+            let targetPath = String(self.filePath!.prefix(self.filePath!.count - 4) + ".\(format)")
+            return targetPath
+        } else {
+            return self.filePath! + ".\(format)"
+        }
+    }
+    
     func output(outputPath: String) -> Bool {
         
         if !self.isOk {
