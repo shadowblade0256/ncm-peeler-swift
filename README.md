@@ -18,3 +18,11 @@
 ## 屏幕截图
 
 ![](https://raw.githubusercontent.com/yuxiqian/ncm-peeler-swift/master/imgs/main.png)
+
+## 致谢
+
+* [ncmdump](https://github.com/nondanee/ncmdump), MIT License
+
+* [CryptoSwift](https://github.com/krzyzanowskim/CryptoSwift), [Other License](https://github.com/krzyzanowskim/CryptoSwift/blob/master/LICENSE)
+
+* [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON), MIT License
