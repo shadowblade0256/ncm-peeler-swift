@@ -25,6 +25,13 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     do {
         headerBuf = [UInt8](repeating: 0, count: 8)
         let length = inStream.read(&headerBuf, maxLength: headerBuf.count)
+        
+        if length < 1 {
+            NSLog("Incorrect length: \(length)")
+            return nil
+        }
+        
+        
         for i in 0..<length {
             if headerBuf[i] != standardHead[i] {
                 inStream.close()
@@ -48,6 +55,12 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         
         keyData = [UInt8](repeating: 0, count: Int(keyLen))
         let keyLength = inStream.read(&keyData, maxLength: keyData.count)
+        
+        if keyLength < 1 {
+            NSLog("Incorrect keyLength: \(keyLength)")
+            return nil
+        }
+        
         for i in 0..<keyLength {
             keyData[i] ^= 0x64
         }
@@ -66,6 +79,13 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         let uLen: UInt32 = fourUInt8Combine(&uLenBuf)
         var modifyDataAsUInt8: [UInt8] = [UInt8](repeating: 0, count: Int(uLen))
         inStream.read(&modifyDataAsUInt8, maxLength: Int(uLen))
+        
+        if Int(uLen) < 1 {
+            NSLog("Incorrect uLen: \(uLen)")
+            return nil
+        }
+        
+        
         for i in 0..<Int(uLen) {
             modifyDataAsUInt8[i] ^= 0x63
         }
@@ -83,6 +103,12 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         
         metaData = try AES(key: aesModifyKey, blockMode: ECB()).decrypt([UInt8](decodedData! as Data))
         dataLen = metaData.count
+        
+        if dataLen < 7 {
+            NSLog("Incorrect dataLen: \(dataLen)")
+            return nil
+        }
+        
         for i in 0..<(dataLen - 6) {
             metaData[i] = metaData[i + 6]
         }
@@ -177,6 +203,11 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     // 否则后面没法继续
     if music.albumCover == nil {
         music.albumCover = NSImage(data: Data(bytes: imageData))
+    }
+    
+    if deKeyData.count < 17 {
+        NSLog("没读出来 deKeyData。")
+        return nil
     }
 
     let realDeKeyData = Array(deKeyData[17..<(deKeyData.count)])

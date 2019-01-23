@@ -96,5 +96,7 @@ func writeMetaInfo(musicTag: ID3Tag?, _ filePath: String) {
             NSLog("未能成功写入元数据信息。")
             //                flac 格式没办法写 tag 信息……
         }
+    } else {
+        NSLog("没有可用的元数据信息。")
     }
 }
