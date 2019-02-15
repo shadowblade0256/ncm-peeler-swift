@@ -19,8 +19,10 @@ class Session {
     var filePath: String?
     
     init(ncmPath: String) {
+        NSLog("Prepare opening stream with \(ncmPath)")
         let inputStream = InputStream(fileAtPath: ncmPath)
         if inputStream == nil {
+            NSLog("Failed to open stream")
             return
         }
         inputStream!.open()

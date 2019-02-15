@@ -34,7 +34,8 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         
         for i in 0..<length {
             if headerBuf[i] != standardHead[i] {
-                inStream.close()
+//                inStream.close()
+                NSLog("file head mismatch.")
                 return nil
             }
         }
