@@ -30,6 +30,9 @@ class Session {
         musicObject = readMetaInfo(inStream: inputStream!)
         if musicObject != nil {
             isOk = true
+            if musicObject!.noMetaData {
+                NSLog(self.filePath!)
+            }
         }
     }
 
@@ -55,8 +58,12 @@ class Session {
         if filePath!.count < 4 {
             return ""
         }
-
-        let format = musicObject!.format.rawValue
+        var format: String = "tmp"
+        if !musicObject!.noMetaData {
+            format = musicObject!.format.rawValue
+        } else {
+            return String(filePath!.prefix(filePath!.count - 4))
+        }
 
         if filePath!.suffix(4) == ".ncm" {
             let targetPath = String(filePath!.prefix(filePath!.count - 4) + ".\(format)")
@@ -103,12 +110,18 @@ class Session {
             /* A poor no meta data object */
             let manager: FileManager = FileManager.default
             /* Must add files to him */
+            var rawPath = ""
+            if outputPath.suffix(4) == ".ncm" {
+                rawPath = String(outputPath.prefix(outputPath.count - 3))
+            } else {
+                rawPath = outputPath + "."
+            }
             do {
                 if freshHeader == [102, 76, 97, 67] {
                     // 102, 76, 97, 67 = f L a C (FLAC header)
-                    try manager.moveItem(atPath: outputPath, toPath: outputPath + MusicFormat.flac.rawValue)
+                    try manager.moveItem(atPath: outputPath, toPath: rawPath + MusicFormat.flac.rawValue)
                 } else {
-                    try manager.moveItem(atPath: outputPath, toPath: outputPath + MusicFormat.mp3.rawValue)
+                    try manager.moveItem(atPath: outputPath, toPath: rawPath + MusicFormat.mp3.rawValue)
                 }
             } catch {
                 return false

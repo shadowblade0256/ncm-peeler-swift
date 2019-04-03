@@ -257,8 +257,12 @@ class BatchViewController: NSViewController, dropFileDelegate {
                             }
                         }
                     } else {
-                        let result = session.output(outputPath: self.outputPath! + session.musicObject!.generateFileName())
-                        
+                        let result: Bool?
+                        if session.musicObject!.noMetaData {
+                            result = session.output(outputPath: truncateFilePath(filePath: self.outputPath! + "/" + String((session.filePath?.split(separator: "/").last)!)))
+                        } else {
+                            result = session.output(outputPath: truncateFilePath(filePath: self.outputPath! + session.musicObject!.generateFileName()))
+                        }
                         self.batchDataList.removeAll(where: { (element) -> Bool in
                             if element.filePath == session.filePath {
                                 return true
@@ -267,7 +271,7 @@ class BatchViewController: NSViewController, dropFileDelegate {
                         })
                         DispatchQueue.main.async {
                             self.reloadBatchData()
-                            if result {
+                            if result! {
                                 self.promptText.stringValue = "成功转换「\(session.musicObject!.title)」。" + self.promptText.stringValue
                                 if self.shouldRemoveFile {
                                     session.deleteFile()
@@ -287,6 +291,15 @@ class BatchViewController: NSViewController, dropFileDelegate {
                     }
                 }
         }
+    }
+    
+    @IBAction func askWhy(_ sender: NSButton) {
+        let errorAlert: NSAlert = NSAlert()
+        errorAlert.messageText = "为什么部分音乐文件信息显示未知？"
+        errorAlert.informativeText = "根据目前的网易云音乐下载策略，\n部分被缓存的的 FLAC 格式文件在生成 ncm 格式文件时会直接跳过元数据的写入。\n\n因此建议您在下载 ncm 格式文件之前，\n先进入设置/下载设置/清除缓存后再进行下载。"
+        errorAlert.addButton(withTitle: "嗯")
+        errorAlert.alertStyle = NSAlert.Style.critical
+        errorAlert.beginSheetModal(for: self.view.window!, completionHandler: nil)
     }
     
     @IBAction func clearButtonClicked(_ sender: NSButton) {
@@ -454,15 +467,27 @@ extension BatchViewController: NSTableViewDelegate {
         if tableColumn == tableView.tableColumns[0] {
             image = (item.musicObject?.albumCover) ?? nil
             text = (item.musicObject?.title) ?? "未知标题"
+            if text == "" {
+                text = "未知标题"
+            }
             cellIdentifier = CellIdentifiers.NameCell
         } else if tableColumn == tableView.tableColumns[1] {
             text = item.musicObject?.artists.joined(separator: " / ") ?? "未知艺术家"
+            if text == "" {
+                text = "未知艺术家"
+            }
             cellIdentifier = CellIdentifiers.ArtistCell
         } else if tableColumn == tableView.tableColumns[2] {
             text = item.musicObject?.getTime() ?? "未知时长"
+            if text == "0:00" {
+                text = "未知时长"
+            }
             cellIdentifier = CellIdentifiers.DurationCell
         } else if tableColumn == tableView.tableColumns[3] {
             text = (item.musicObject?.format.rawValue ?? "未知格式") + "，" + (item.musicObject?.getBitRate() ?? "未知比特率")
+            if text == "，0kbit/s" {
+                text = "未知格式和比特率"
+            }
             cellIdentifier = CellIdentifiers.FormatCell
         } else if tableColumn == tableView.tableColumns[4] {
             text = item.filePath ?? "未知路径"

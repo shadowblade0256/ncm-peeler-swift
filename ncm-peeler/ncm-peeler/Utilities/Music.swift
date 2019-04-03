@@ -50,6 +50,9 @@ class Music: NSObject {
     }
     
     func generateFileName() -> String {
+        if self.noMetaData {
+            return ""
+        }
         var fileName = "/\(self.artists[0]) - \(self.title)"
         switch self.format {
         case .mp3:

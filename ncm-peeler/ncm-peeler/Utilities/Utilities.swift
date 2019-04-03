@@ -87,6 +87,20 @@ protocol dropFileDelegate {
     func openBatch(_ array: NSArray) -> ()
 }
 
+func truncateFilePath(filePath: String) -> String {
+
+    if filePath.count < 4 {
+        return ""
+    }
+
+    if filePath.suffix(4) == ".ncm" {
+        let targetPath = String(filePath.prefix(filePath.count - 4))
+        return targetPath
+    } else {
+        return filePath
+    }
+}
+
 func writeMetaInfo(musicTag: ID3Tag?, _ filePath: String) {
     if musicTag != nil {
         do {
