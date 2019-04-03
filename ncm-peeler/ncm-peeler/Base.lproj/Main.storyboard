@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mCD-38-L7D">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="mCD-38-L7D">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -54,6 +54,34 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="编辑" id="MIv-dD-zxz">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="编辑" id="Xgc-HI-5ti">
+                                    <items>
+                                        <menuItem title="全部选择" keyEquivalent="a" id="2bl-XE-Bwk">
+                                            <connections>
+                                                <action selector="selectAllChecked:" target="Ady-hI-5gd" id="QdS-YP-TS6"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="全部不选择" keyEquivalent="A" id="X1Q-6P-ULy">
+                                            <modifierMask key="keyEquivalentModifierMask" shift="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="deselectAllChecked:" target="Ady-hI-5gd" id="eTx-as-Fy1"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="OiS-zn-z0R"/>
+                                        <menuItem title="删除" id="HIi-gp-MQw">
+                                            <string key="keyEquivalent" base64-UTF8="YES">
+CA
+</string>
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="removeSelected:" target="Ady-hI-5gd" id="qdM-ik-cb2"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                             <menuItem title="帮助" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="帮助" systemMenu="help" id="F2S-fz-NVQ">
@@ -75,6 +103,19 @@
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="ncm_peeler" customModuleProvider="target"/>
                 <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
+                <menu id="3OU-6L-XXf">
+                    <items>
+                        <menuItem title="Item 1" id="PDq-64-RNA">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Item 2" id="Mv6-j3-Kxv">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                        <menuItem title="Item 3" id="oW9-7O-Azk">
+                            <modifierMask key="keyEquivalentModifierMask"/>
+                        </menuItem>
+                    </items>
+                </menu>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
         </scene>
@@ -875,6 +916,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                                         </textView>
                                     </subviews>
                                 </clipView>
+                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="yrO-zz-l9N">
+                                    <rect key="frame" x="-100" y="-100" width="480" height="16"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </scroller>
                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="WaX-62-WlM">
                                     <rect key="frame" x="464" y="0.0" width="16" height="413"/>
                                     <autoresizingMask key="autoresizingMask"/>

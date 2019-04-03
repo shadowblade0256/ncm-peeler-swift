@@ -123,6 +123,18 @@ class BatchViewController: NSViewController, dropFileDelegate {
         })
     }
     
+    @IBAction func selectAllChecked(_ sender: NSMenuItem) {
+        dataTableView.selectAll(sender)
+    }
+    
+    @IBAction func deselectAllChecked(_ sender: NSMenuItem) {
+        dataTableView.deselectAll(sender)
+    }
+
+    @IBAction func removeSelected(_ sender: NSMenuItem) {
+        removeButtonClicked(removeButton)
+    }
+    
     @IBAction func putOriginCheckerChecked(_ sender: NSButton) {
         pathController.isEnabled = (sender.state == .off)
     }
