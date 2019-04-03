@@ -74,12 +74,16 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         
         deKeyData = try AES(key: aesCoreKey,
                             blockMode: ECB(),
-                            padding: .zeroPadding).decrypt(keyData)
+                            padding: .noPadding).decrypt(keyData)
         
         for i in 17..<keyLength {
             // Filter padding bytes
-            if deKeyData[i] > 15 {
+            if (i < 100) {
                 cleanDeKeyData.append(deKeyData[i])
+            } else {
+                if (deKeyData[i] != deKeyData[keyLength - 1]) {
+                    cleanDeKeyData.append(deKeyData[i])
+                }
             }
         }
         
@@ -88,7 +92,9 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         let deKeyString = String(bytes: cleanDeKeyData, encoding: .ascii)
         NSLog("obtained key \(deKeyString ?? "...FAILED...")")
         
-        
+        if (deKeyString?.suffix(4) != "E9Lb") {
+            NSLog("Might go wrong. Suffix mismatch. KEY: \(deKeyString)")
+        }
         
         uLenBuf = [UInt8](repeating: 0, count: 4)
         // 4 个 UInt8 充 UInt32
