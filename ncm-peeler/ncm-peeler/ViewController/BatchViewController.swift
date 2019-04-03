@@ -179,8 +179,8 @@ class BatchViewController: NSViewController, dropFileDelegate {
     }
     
     @IBAction func openCredits(_ sender: NSButton) {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        creditsWindowController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Credits Window Controller")) as? NSWindowController
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        creditsWindowController = storyboard.instantiateController(withIdentifier: "Credits Window Controller") as? NSWindowController
         creditsWindowController?.showWindow(sender)
     }
     
@@ -198,8 +198,8 @@ class BatchViewController: NSViewController, dropFileDelegate {
         }
 
         
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        loadingWC = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "LoadingWindowController")) as? NSWindowController
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        loadingWC = storyboard.instantiateController(withIdentifier: "LoadingWindowController") as? NSWindowController
 
         self.view.window!.beginSheet(loadingWC!.window!, completionHandler: nil)
         

@@ -38,7 +38,7 @@ class DraggableButton: NSButton {
     }
     
     fileprivate func checkExtension(_ drag: NSDraggingInfo) -> Bool {
-        guard let board = drag.draggingPasteboard().propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
+        guard let board = drag.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = board[0] as? String
             else { return false }
         
@@ -53,7 +53,7 @@ class DraggableButton: NSButton {
     
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-        guard let pasteboard = sender.draggingPasteboard().propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
+        guard let pasteboard = sender.draggingPasteboard.propertyList(forType: NSPasteboard.PasteboardType(rawValue: "NSFilenamesPboardType")) as? NSArray,
             let path = pasteboard[0] as? String
             else { return false }
         if pasteboard.count == 1 {

@@ -171,6 +171,7 @@
 				TargetAttributes = {
 					8A1582B0213D08E8000E675C = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
 							com.apple.Sandbox = {
@@ -218,7 +219,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/ID3TagEditor/ID3TagEditor.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -231,7 +232,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ncm-peeler/Pods-ncm-peeler-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		4292A7F637F40E4BF50726E6 /* [CP] Check Pods Manifest.lock */ = {
@@ -414,7 +415,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = yue.ncm.peeler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -433,7 +434,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = yue.ncm.peeler;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

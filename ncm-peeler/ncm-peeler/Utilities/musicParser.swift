@@ -17,6 +17,7 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     var keyLenBuf: [UInt8] = []
     var keyData: [UInt8] = []
     var deKeyData: [UInt8] = []
+    var cleanDeKeyData: [UInt8] = []
     var uLenBuf: [UInt8] = []
     var metaData: [UInt8] = []
     var crc32CheckBuf: [UInt8] = []
@@ -53,9 +54,10 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         inStream.read(&keyLenBuf, maxLength: keyLenBuf.count)
         
         let keyLen: UInt32 = fourUInt8Combine(&keyLenBuf)
+        NSLog("keyLen: \(keyLen)")
         
         keyData = [UInt8](repeating: 0, count: Int(keyLen))
-        let keyLength = inStream.read(&keyData, maxLength: keyData.count)
+        var keyLength = inStream.read(&keyData, maxLength: keyData.count)
         
         if keyLength < 1 {
             NSLog("Incorrect keyLength: \(keyLength)")
@@ -72,7 +74,21 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         
         deKeyData = try AES(key: aesCoreKey,
                             blockMode: ECB(),
-                            padding: .pkcs7).decrypt(keyData)
+                            padding: .zeroPadding).decrypt(keyData)
+        
+        for i in 17..<keyLength {
+            // Filter padding bytes
+            if deKeyData[i] > 15 {
+                cleanDeKeyData.append(deKeyData[i])
+            }
+        }
+        
+        keyLength = cleanDeKeyData.count
+        
+        let deKeyString = String(bytes: cleanDeKeyData, encoding: .ascii)
+        NSLog("obtained key \(deKeyString ?? "...FAILED...")")
+        
+        
         
         uLenBuf = [UInt8](repeating: 0, count: 4)
         // 4 个 UInt8 充 UInt32
@@ -203,7 +219,7 @@ func readMetaInfo(inStream: InputStream) -> Music? {
     // 也还是要 read 出来这么多字节
     // 否则后面没法继续
     if music.albumCover == nil {
-        music.albumCover = NSImage(data: Data(bytes: imageData))
+        music.albumCover = NSImage(data: Data(imageData))
     }
     
     if deKeyData.count < 17 {
@@ -211,10 +227,10 @@ func readMetaInfo(inStream: InputStream) -> Music? {
         return nil
     }
 
-    let realDeKeyData = Array(deKeyData[17..<(deKeyData.count)])
     // 从第 17 位开始取 deKeyData
+    // 前面有一段废话 ‘neteasecloudmusic’
     // 创建新的 realDeKeyData 并用它生成 keyBox
-    music.keyBox = buildKeyBox(key: realDeKeyData)
+    music.keyBox = buildKeyBox(key: cleanDeKeyData)
     
     return music
 }

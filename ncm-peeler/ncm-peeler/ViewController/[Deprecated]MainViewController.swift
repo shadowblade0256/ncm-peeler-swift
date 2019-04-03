@@ -84,8 +84,8 @@ class MainViewController: NSViewController, dropFileDelegate {
     var creditsWindowController: NSWindowController?
     
     @IBAction func openCredits(_ sender: NSButton) {
-        let storyboard = NSStoryboard(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil)
-        creditsWindowController = storyboard.instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Credits Window Controller")) as? NSWindowController
+        let storyboard = NSStoryboard(name: "Main", bundle: nil)
+        creditsWindowController = storyboard.instantiateController(withIdentifier: "Credits Window Controller") as? NSWindowController
         creditsWindowController?.showWindow(sender)
     }
     

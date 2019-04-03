@@ -23,7 +23,7 @@ class ID3FrameStringContentParser {
     func parse(frame: Data, version: ID3Version) -> String? {
         let headerSize = id3FrameConfiguration.headerSizeFor(version: version)
         let frameContentRangeStart = headerSize + id3FrameConfiguration.encodingSize()
-        let frameContentRange = Range(frameContentRangeStart..<frame.count)
+        let frameContentRange = frameContentRangeStart..<frame.count
         let frameContent = frame.subdata(in: frameContentRange)
         let encoding = stringEncodingDetector.detect(frame: frame, version: version)
         if let frameContentAsString = String(data: frameContent, encoding: encoding) {

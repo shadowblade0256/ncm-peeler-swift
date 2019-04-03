@@ -4,7 +4,7 @@ platform :osx, '10.13’
 
 target 'ncm-peeler' do
   use_frameworks!
-  pod 'SwiftyJSON', '~> 4.0'
+  pod 'SwiftyJSON'
   pod 'ID3TagEditor'
   pod 'CryptoSwift'
 end
