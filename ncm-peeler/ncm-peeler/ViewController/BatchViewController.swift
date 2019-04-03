@@ -108,7 +108,23 @@ class BatchViewController: NSViewController, dropFileDelegate {
     
     var loadingWC: NSWindowController?
     
+    var buttonTapCount: Int = 0
+    
     var creditsWindowController: NSWindowController?
+    
+    @IBAction func triggerLegacy(_ sender: NSButton) {
+        if (buttonTapCount == 5) {
+            
+            let storyboard = NSStoryboard(name: "Main", bundle: nil)
+            creditsWindowController = storyboard.instantiateController(withIdentifier: "LegacyWindowController") as? NSWindowController
+            creditsWindowController?.showWindow(sender)
+            
+            buttonTapCount = 0
+        }
+        else {
+            buttonTapCount += 1
+        }
+    }
     
     @IBAction func selectorClicked(_ sender: NSPathControl) {
         let openFolder = NSOpenPanel()
@@ -130,6 +146,7 @@ class BatchViewController: NSViewController, dropFileDelegate {
     @IBAction func deselectAllChecked(_ sender: NSMenuItem) {
         dataTableView.deselectAll(sender)
     }
+    
 
     @IBAction func removeSelected(_ sender: NSMenuItem) {
         removeButtonClicked(removeButton)

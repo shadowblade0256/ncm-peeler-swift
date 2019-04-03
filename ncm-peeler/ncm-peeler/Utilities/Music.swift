@@ -10,6 +10,7 @@ import Cocoa
 import ID3TagEditor
 
 class Music: NSObject {
+    var noMetaData: Bool = false
     var title: String = ""
     var musicId: Int = 0
     var artists: [String] = []
