@@ -56,7 +56,7 @@ class MainViewController: NSViewController, dropFileDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.exportButton.isEnabled = false
-        self.albumView.delegate = self
+//        self.albumView.delegate = self
         // Do any additional setup after loading the view.
     }
 

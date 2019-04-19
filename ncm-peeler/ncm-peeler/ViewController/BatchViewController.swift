@@ -114,7 +114,6 @@ class BatchViewController: NSViewController, dropFileDelegate {
     
     @IBAction func triggerLegacy(_ sender: NSButton) {
         if (buttonTapCount == 5) {
-            
             let storyboard = NSStoryboard(name: "Main", bundle: nil)
             creditsWindowController = storyboard.instantiateController(withIdentifier: "LegacyWindowController") as? NSWindowController
             creditsWindowController?.showWindow(sender)
